@@ -1,0 +1,273 @@
+[
+  {
+    "id": "chat-20240115-001",
+    "timestamp": "2024-01-15T10:00:00.000Z",
+    "sessionId": "session-abc123",
+    "userId": "user-xyz789",
+    "intent": {
+      "detected": "company_registration_pricing",
+      "confidence": 0.95,
+      "keywords": ["จดทะเบียน", "ราคา"]
+    },
+    "persona": {
+      "detected": "REGISTRATION",
+      "source": "detected"
+    },
+    "responseType": "pricing",
+    "userMessage": "จดทะเบียนบจก ราคาเท่าไหร่",
+    "aiResponse": "จัดตั้งบริษัทจำกัด (บจก)\nค่าบริการอยู่ที่ 25,000 บาท (ครั้งเดียว)\nใช้เวลาประมาณ 1-2 สัปดาห์\n\nสนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ 😊",
+    "knowledgeSources": ["services.md", "th/packages-and-pricing.md"],
+    "knowledgeLength": 1200,
+    "systemPromptLength": 2500,
+    "pricing": {
+      "questionType": "explicit",
+      "containsPrice": true,
+      "priceValue": "25,000 บาท",
+      "priceType": "one_time",
+      "timeline": "1-2 สัปดาห์"
+    },
+    "safety": {
+      "violations": ["none"],
+      "violationCount": 0,
+      "hasContactInfo": true,
+      "responseLength": 145,
+      "sentenceCount": 4
+    },
+    "handoff": {
+      "status": "none",
+      "reason": "none"
+    },
+    "abTesting": {
+      "variant": "A",
+      "responseType": "pricing",
+      "ctaVariant": "standard"
+    },
+    "userActions": {
+      "contactMethod": "click",
+      "contactedAt": "2024-01-15T10:01:30.000Z",
+      "timeToContact": 90,
+      "messageCount": 1,
+      "conversationEnded": false
+    },
+    "performance": {
+      "responseTimeMs": 1250,
+      "tokenCount": 450,
+      "model": "mistral",
+      "temperature": 0.2,
+      "numCtx": 1024
+    },
+    "quality": {
+      "goldenResponseMatch": true,
+      "goldenResponseSimilarity": 0.92,
+      "expectedIntent": "company_registration_pricing",
+      "expectedPersona": "REGISTRATION",
+      "intentCorrect": true,
+      "personaCorrect": true
+    },
+    "metadata": {
+      "userAgent": "Mozilla/5.0...",
+      "ipAddress": "192.168.1.1",
+      "language": "th"
+    }
+  },
+  {
+    "id": "chat-20240115-002",
+    "timestamp": "2024-01-15T10:05:00.000Z",
+    "sessionId": "session-def456",
+    "intent": {
+      "detected": "accounting_pricing",
+      "confidence": 0.88
+    },
+    "persona": {
+      "detected": "ACCOUNTING",
+      "source": "detected"
+    },
+    "responseType": "pricing",
+    "userMessage": "บัญชีราคาเท่าไหร่",
+    "aiResponse": "บริการบัญชีมีหลายแพ็กเกจค่ะ:\n\n- Accounting Micro: 2,500 บาท/เดือน\n- Accounting SME: 6,000 บาท/เดือน\n- Accounting Corporate: 12,000 บาท/เดือน\n\nสนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ 😊",
+    "knowledgeSources": ["services.md"],
+    "pricing": {
+      "questionType": "explicit",
+      "containsPrice": true,
+      "priceValue": "2,500-12,000 บาท/เดือน",
+      "priceType": "monthly"
+    },
+    "safety": {
+      "violations": ["none"],
+      "violationCount": 0,
+      "hasContactInfo": true,
+      "responseLength": 180
+    },
+    "handoff": {
+      "status": "none",
+      "reason": "none"
+    },
+    "abTesting": {
+      "variant": "B",
+      "responseType": "pricing",
+      "ctaVariant": "urgent"
+    },
+    "userActions": {
+      "contactMethod": "none",
+      "messageCount": 1,
+      "conversationEnded": true,
+      "conversationEndedAt": "2024-01-15T10:06:00.000Z"
+    },
+    "performance": {
+      "responseTimeMs": 980,
+      "model": "mistral"
+    },
+    "quality": {
+      "intentCorrect": true,
+      "personaCorrect": true
+    }
+  },
+  {
+    "id": "chat-20240115-003",
+    "timestamp": "2024-01-15T10:10:00.000Z",
+    "sessionId": "session-ghi789",
+    "intent": {
+      "detected": "restricted_legal",
+      "confidence": 0.92
+    },
+    "persona": {
+      "detected": "REGISTRATION",
+      "source": "default"
+    },
+    "responseType": "restricted",
+    "userMessage": "ขั้นตอนการจดทะเบียนบริษัทเป็นอย่างไร",
+    "aiResponse": "กรณีนี้เป็นรายละเอียดเชิงลึก เจ้าหน้าที่จะช่วยแนะนำได้ตรงกับสถานการณ์มากกว่าค่ะ\nแนะนำติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ 😊",
+    "knowledgeSources": ["none"],
+    "pricing": {
+      "questionType": "none",
+      "containsPrice": false
+    },
+    "safety": {
+      "violations": ["none"],
+      "violationCount": 0,
+      "hasContactInfo": true,
+      "responseLength": 95
+    },
+    "handoff": {
+      "status": "requested",
+      "reason": "complex_question",
+      "requestedAt": "2024-01-15T10:10:05.000Z",
+      "timeToRequest": 5
+    },
+    "abTesting": {
+      "variant": "none",
+      "responseType": "none"
+    },
+    "userActions": {
+      "contactMethod": "email",
+      "contactedAt": "2024-01-15T10:11:00.000Z",
+      "timeToContact": 60,
+      "messageCount": 1,
+      "conversationEnded": false
+    },
+    "performance": {
+      "responseTimeMs": 150,
+      "model": "mistral"
+    },
+    "quality": {
+      "intentCorrect": true,
+      "personaCorrect": true
+    }
+  },
+  {
+    "id": "chat-20240115-004",
+    "timestamp": "2024-01-15T10:15:00.000Z",
+    "sessionId": "session-jkl012",
+    "intent": {
+      "detected": "company_overview",
+      "confidence": 0.75
+    },
+    "persona": {
+      "detected": "REGISTRATION",
+      "source": "detected"
+    },
+    "responseType": "overview",
+    "userMessage": "บริษัทอยู่ที่ไหน",
+    "aiResponse": "บริษัท แสน โซลูชั่น จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com",
+    "knowledgeSources": ["company.md"],
+    "pricing": {
+      "questionType": "none",
+      "containsPrice": false
+    },
+    "safety": {
+      "violations": ["none"],
+      "violationCount": 0,
+      "hasContactInfo": true,
+      "responseLength": 120
+    },
+    "handoff": {
+      "status": "none",
+      "reason": "none"
+    },
+    "abTesting": {
+      "variant": "A",
+      "responseType": "overview"
+    },
+    "userActions": {
+      "contactMethod": "none",
+      "messageCount": 2,
+      "conversationEnded": false
+    },
+    "performance": {
+      "responseTimeMs": 850,
+      "model": "mistral"
+    },
+    "quality": {
+      "intentCorrect": true,
+      "personaCorrect": true
+    }
+  },
+  {
+    "id": "chat-20240115-005",
+    "timestamp": "2024-01-15T10:20:00.000Z",
+    "sessionId": "session-mno345",
+    "intent": {
+      "detected": "unknown",
+      "confidence": 0.5
+    },
+    "persona": {
+      "detected": "REGISTRATION",
+      "source": "default"
+    },
+    "responseType": "greeting",
+    "userMessage": "สวัสดี",
+    "aiResponse": "สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด มีอะไรให้ช่วยไหมคะ?",
+    "knowledgeSources": ["company.md"],
+    "pricing": {
+      "questionType": "none",
+      "containsPrice": false
+    },
+    "safety": {
+      "violations": ["none"],
+      "violationCount": 0,
+      "hasContactInfo": false,
+      "responseLength": 65
+    },
+    "handoff": {
+      "status": "none",
+      "reason": "none"
+    },
+    "abTesting": {
+      "variant": "none",
+      "responseType": "none"
+    },
+    "userActions": {
+      "contactMethod": "none",
+      "messageCount": 1,
+      "conversationEnded": false
+    },
+    "performance": {
+      "responseTimeMs": 650,
+      "model": "mistral"
+    },
+    "quality": {
+      "intentCorrect": true,
+      "personaCorrect": true
+    }
+  }
+]

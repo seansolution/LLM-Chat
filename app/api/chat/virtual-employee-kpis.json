@@ -1,0 +1,238 @@
+{
+  "kpis": {
+    "primary": [
+      {
+        "id": "conversion_rate",
+        "name": "Conversion Rate",
+        "description": "% of conversations that result in customer contact",
+        "target": 15,
+        "unit": "percentage",
+        "measurement": "(conversations_with_contact / total_conversations) * 100",
+        "businessImpact": "Direct revenue attribution",
+        "reviewFrequency": "weekly",
+        "category": "business_outcome"
+      },
+      {
+        "id": "revenue_attribution",
+        "name": "Revenue Attribution",
+        "description": "Total revenue attributed to AI chat conversations",
+        "target": 10,
+        "unit": "percentage_of_total_sales",
+        "measurement": "Sum of closed deals attributed to conversations",
+        "businessImpact": "Revenue contribution",
+        "reviewFrequency": "monthly",
+        "category": "business_outcome"
+      },
+      {
+        "id": "cost_per_conversion",
+        "name": "Cost per Conversion",
+        "description": "Operational cost per customer conversion",
+        "target": 500,
+        "unit": "THB",
+        "measurement": "(operational_cost / conversions)",
+        "businessImpact": "Cost efficiency",
+        "reviewFrequency": "monthly",
+        "category": "business_outcome"
+      }
+    ],
+    "secondary": [
+      {
+        "id": "intent_coverage",
+        "name": "Intent Coverage",
+        "description": "% of user messages with detected intent (not 'unknown')",
+        "target": 90,
+        "unit": "percentage",
+        "measurement": "(messages_with_intent / total_messages) * 100",
+        "businessImpact": "Better routing and responses",
+        "reviewFrequency": "weekly",
+        "category": "operational_excellence"
+      },
+      {
+        "id": "persona_accuracy",
+        "name": "Persona Accuracy",
+        "description": "% of conversations routed to correct persona",
+        "target": 95,
+        "unit": "percentage",
+        "measurement": "Manual review of persona assignments",
+        "businessImpact": "Better service matching",
+        "reviewFrequency": "weekly",
+        "category": "operational_excellence"
+      },
+      {
+        "id": "pricing_answer_rate",
+        "name": "Pricing Answer Rate",
+        "description": "% of pricing questions that include price in response",
+        "target": 95,
+        "unit": "percentage",
+        "measurement": "(pricing_questions_with_price / total_pricing_questions) * 100",
+        "businessImpact": "Faster sales cycle",
+        "reviewFrequency": "weekly",
+        "category": "operational_excellence"
+      },
+      {
+        "id": "safety_violation_rate",
+        "name": "Safety Violation Rate",
+        "description": "% of responses with safety violations",
+        "target": 0,
+        "unit": "percentage",
+        "measurement": "Automated safety gate checks",
+        "businessImpact": "Risk mitigation",
+        "reviewFrequency": "realtime",
+        "category": "operational_excellence"
+      },
+      {
+        "id": "average_response_time",
+        "name": "Average Response Time",
+        "description": "Average time to generate AI response",
+        "target": 3000,
+        "unit": "milliseconds",
+        "measurement": "sum(response_time) / count(responses)",
+        "businessImpact": "User experience",
+        "reviewFrequency": "daily",
+        "category": "operational_excellence"
+      },
+      {
+        "id": "handoff_rate",
+        "name": "Handoff Rate",
+        "description": "% of conversations handed off to human staff",
+        "target": {
+          "min": 5,
+          "max": 15
+        },
+        "unit": "percentage",
+        "measurement": "(handoffs / total_conversations) * 100",
+        "businessImpact": "Balance between automation and human touch",
+        "reviewFrequency": "weekly",
+        "category": "operational_excellence"
+      },
+      {
+        "id": "drop_off_rate",
+        "name": "Drop-off Rate",
+        "description": "% of conversations where user stops responding",
+        "target": 70,
+        "unit": "percentage",
+        "measurement": "(dropped_conversations / total_conversations) * 100",
+        "businessImpact": "Engagement and conversion",
+        "reviewFrequency": "weekly",
+        "category": "operational_excellence"
+      }
+    ],
+    "tertiary": [
+      {
+        "id": "conversation_continuation_rate",
+        "name": "Conversation Continuation Rate",
+        "description": "% of users who send multiple messages",
+        "target": 40,
+        "unit": "percentage",
+        "measurement": "(multi_turn_conversations / total_conversations) * 100",
+        "businessImpact": "Engagement depth",
+        "reviewFrequency": "weekly",
+        "category": "quality_metric"
+      },
+      {
+        "id": "average_turns_to_conversion",
+        "name": "Average Turns to Conversion",
+        "description": "Average number of message turns before customer contacts",
+        "target": 4,
+        "unit": "turns",
+        "measurement": "sum(turns_to_conversion) / count(conversions)",
+        "businessImpact": "Sales efficiency",
+        "reviewFrequency": "weekly",
+        "category": "quality_metric"
+      },
+      {
+        "id": "cta_conversion_rate",
+        "name": "CTA Conversion Rate",
+        "description": "% of CTA views that result in contact",
+        "target": 20,
+        "unit": "percentage",
+        "measurement": "(contacts_after_cta / cta_views) * 100",
+        "businessImpact": "CTA effectiveness",
+        "reviewFrequency": "weekly",
+        "category": "quality_metric"
+      },
+      {
+        "id": "golden_response_match_rate",
+        "name": "Golden Response Match Rate",
+        "description": "% of responses matching expected golden templates",
+        "target": 80,
+        "unit": "percentage",
+        "measurement": "Automated comparison with golden responses",
+        "businessImpact": "Response quality consistency",
+        "reviewFrequency": "weekly",
+        "category": "quality_metric"
+      },
+      {
+        "id": "customer_satisfaction_score",
+        "name": "Customer Satisfaction Score",
+        "description": "Average customer satisfaction rating",
+        "target": 4.0,
+        "unit": "score_out_of_5",
+        "measurement": "Post-conversation survey or feedback",
+        "businessImpact": "Customer experience",
+        "reviewFrequency": "monthly",
+        "category": "quality_metric"
+      }
+    ]
+  },
+  "performanceReviewSchedule": {
+    "weekly": {
+      "focus": "Operational metrics and quick wins",
+      "duration": "30 minutes",
+      "attendees": ["Product Manager", "Engineering Lead"]
+    },
+    "monthly": {
+      "focus": "Business outcomes and trends",
+      "duration": "1 hour",
+      "attendees": ["Product Manager", "Head of Customer Service", "Engineering Lead"]
+    },
+    "quarterly": {
+      "focus": "Comprehensive performance assessment",
+      "duration": "2 hours",
+      "attendees": ["Product Manager", "Head of Customer Service", "Engineering Lead", "CEO"]
+    },
+    "annual": {
+      "focus": "Strategic planning and goal setting",
+      "duration": "Half day",
+      "attendees": ["All stakeholders"]
+    }
+  },
+  "improvementProcess": {
+    "framework": "PDCA",
+    "cycle": {
+      "plan": {
+        "frequency": "weekly",
+        "activities": [
+          "Analyze performance data",
+          "Identify improvement opportunities",
+          "Prioritize actions",
+          "Create action plan"
+        ]
+      },
+      "do": {
+        "frequency": "weekly-monthly",
+        "activities": [
+          "Implement changes",
+          "Deploy updates",
+          "Monitor implementation"
+        ]
+      },
+      "check": {
+        "frequency": "weekly-monthly",
+        "activities": [
+          "Measure results",
+          "Analyze impact",
+          "Document learnings"
+        ]
+      },
+      "act": {
+        "frequency": "monthly-quarterly",
+        "activities": [
+          "Standardize success",
+          "Iterate on failures",
+          "Plan next cycle"
+        ]
+      }
+    }
+  }
+}

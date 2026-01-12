@@ -1,0 +1,188 @@
+[
+  {
+    "handoffId": "chat-20240115-001",
+    "timestamp": "2024-01-15T10:02:00.000Z",
+    "priority": "high",
+    "quickSummary": {
+      "customer": "customer@example.com",
+      "persona": "REGISTRATION",
+      "intent": "สอบถามราคาจดทะเบียนบริษัท",
+      "buyingIntent": "ready_to_buy",
+      "urgency": "high"
+    },
+    "summary": {
+      "summary": "ลูกค้าสนใจการจดทะเบียนบริษัท และได้สอบถามราคาแล้ว มีการสนทนา 3 ข้อความ คำถามล่าสุด: \"อยากคุยกับเจ้าหน้าที่หน่อยครับ\"",
+      "keyPoints": [
+        "สนใจจดทะเบียนบริษัท",
+        "สอบถามราคาแล้ว",
+        "ถาม: ใช้เอกสารอะไรบ้างครับ",
+        "ลูกค้าขอคุยกับเจ้าหน้าที่"
+      ],
+      "customerName": "customer",
+      "customerEmail": "customer@example.com",
+      "customerPhone": "081-234-5678",
+      "persona": "REGISTRATION",
+      "primaryIntent": "company_registration_pricing",
+      "buyingIntent": "ready_to_buy",
+      "urgencyLevel": "high",
+      "messageCount": 3,
+      "conversationDuration": 120,
+      "topicsDiscussed": [
+        "จดทะเบียนบริษัท",
+        "ราคา",
+        "ระยะเวลา"
+      ],
+      "questionsAsked": [
+        "ใช้เอกสารอะไรบ้างครับ"
+      ],
+      "pricesMentioned": [
+        "25,000 บาท"
+      ],
+      "handoffReason": "user_requested",
+      "handoffTimestamp": "2024-01-15T10:02:00.000Z",
+      "alreadyAnswered": {
+        "pricing": true,
+        "timeline": true,
+        "requirements": true,
+        "contactInfo": true,
+        "serviceDetails": true
+      },
+      "suggestedAction": {
+        "type": "call",
+        "priority": "high",
+        "reason": "ลูกค้าพร้อมซื้อและมีความเร่งด่วน",
+        "timeline": "ภายใน 1 ชั่วโมง",
+        "estimatedValue": 25000
+      },
+      "suggestedScript": "สวัสดีคุณcustomer ฉันเป็นเจ้าหน้าที่จากบริษัท แสน โซลูชั่น จำกัด\n\nเห็นว่าคุณสนใจการจดทะเบียนบริษัท และได้คุยกับแอดมินไปแล้ว\n\nเข้าใจว่าคุณได้ทราบราคาแล้ว และทราบระยะเวลาแล้ว \n\nคุณพร้อมที่จะเริ่มได้เลยไหมคะ? เราสามารถช่วยคุณได้ทันทีค่ะ",
+      "metadata": {
+        "sessionId": "session-123",
+        "conversationId": "chat-1",
+        "firstMessage": "สวัสดีครับ สนใจจดทะเบียนบริษัท ราคาเท่าไหร่ครับ",
+        "lastMessage": "อยากคุยกับเจ้าหน้าที่หน่อยครับ"
+      }
+    },
+    "actionCard": {
+      "suggestedAction": {
+        "type": "call",
+        "priority": "high",
+        "reason": "ลูกค้าพร้อมซื้อและมีความเร่งด่วน",
+        "timeline": "ภายใน 1 ชั่วโมง",
+        "estimatedValue": 25000
+      },
+      "suggestedScript": "สวัสดีคุณcustomer ฉันเป็นเจ้าหน้าที่จากบริษัท แสน โซลูชั่น จำกัด\n\nเห็นว่าคุณสนใจการจดทะเบียนบริษัท และได้คุยกับแอดมินไปแล้ว\n\nเข้าใจว่าคุณได้ทราบราคาแล้ว และทราบระยะเวลาแล้ว \n\nคุณพร้อมที่จะเริ่มได้เลยไหมคะ? เราสามารถช่วยคุณได้ทันทีค่ะ",
+      "doNotAsk": [
+        "❌ อย่าถามราคา (ลูกค้าทราบแล้ว)",
+        "❌ อย่าถามระยะเวลา (ลูกค้าทราบแล้ว)",
+        "❌ อย่าถามเอกสารที่ต้องใช้ (ลูกค้าทราบแล้ว)",
+        "❌ อย่าให้ข้อมูลติดต่อซ้ำ (ลูกค้ามีแล้ว)"
+      ]
+    },
+    "conversationHistory": [
+      {
+        "timestamp": "2024-01-15T10:00:00.000Z",
+        "userMessage": "สวัสดีครับ สนใจจดทะเบียนบริษัท ราคาเท่าไหร่ครับ",
+        "aiResponse": "สวัสดีค่ะ! สำหรับการจดทะเบียนบริษัท ราคาเริ่มต้นที่ 25,000 บาท (ครั้งเดียว) ใช้เวลาประมาณ 7-14 วันทำการค่ะ",
+        "intent": "company_registration_pricing"
+      },
+      {
+        "timestamp": "2024-01-15T10:01:00.000Z",
+        "userMessage": "ใช้เอกสารอะไรบ้างครับ",
+        "aiResponse": "ต้องใช้เอกสารดังนี้: 1. สำเนาบัตรประชาชน 2. สำเนาทะเบียนบ้าน 3. หนังสือยินยอม 4. ชื่อบริษัทที่ต้องการจดทะเบียนค่ะ",
+        "intent": "company_registration_overview"
+      },
+      {
+        "timestamp": "2024-01-15T10:02:00.000Z",
+        "userMessage": "อยากคุยกับเจ้าหน้าที่หน่อยครับ",
+        "aiResponse": "ยินดีค่ะ! เจ้าหน้าที่พร้อมให้คำปรึกษาค่ะ ติดต่อได้ที่ 086-398-6889 หรือ zanhcpe@gmail.com",
+        "intent": "company_registration_pricing"
+      }
+    ]
+  },
+  {
+    "handoffId": "chat-20240116-002",
+    "timestamp": "2024-01-16T14:30:00.000Z",
+    "priority": "medium",
+    "quickSummary": {
+      "customer": "info@company.co.th",
+      "persona": "ACCOUNTING",
+      "intent": "สอบถามราคาบริการบัญชี",
+      "buyingIntent": "price_comparison",
+      "urgency": "medium"
+    },
+    "summary": {
+      "summary": "ลูกค้าสนใจบริการบัญชีและภาษี และได้สอบถามราคาแล้ว มีการสนทนา 2 ข้อความ",
+      "keyPoints": [
+        "สนใจบัญชี",
+        "สอบถามราคาแล้ว",
+        "เปรียบเทียบราคา"
+      ],
+      "customerEmail": "info@company.co.th",
+      "persona": "ACCOUNTING",
+      "primaryIntent": "accounting_pricing",
+      "buyingIntent": "price_comparison",
+      "urgencyLevel": "medium",
+      "messageCount": 2,
+      "conversationDuration": 180,
+      "topicsDiscussed": [
+        "บัญชี",
+        "ภาษี",
+        "ราคา"
+      ],
+      "questionsAsked": [],
+      "pricesMentioned": [
+        "15,000 บาท",
+        "20,000 บาท"
+      ],
+      "handoffReason": "long_conversation",
+      "handoffTimestamp": "2024-01-16T14:30:00.000Z",
+      "alreadyAnswered": {
+        "pricing": true,
+        "timeline": false,
+        "requirements": false,
+        "contactInfo": true,
+        "serviceDetails": true
+      },
+      "suggestedAction": {
+        "type": "send_proposal",
+        "priority": "high",
+        "reason": "ลูกค้ากำลังเปรียบเทียบราคา ควรส่ง proposal เร็ว",
+        "timeline": "ภายใน 24 ชั่วโมง",
+        "estimatedValue": 180000
+      },
+      "suggestedScript": "สวัสดีค่ะ ฉันเป็นเจ้าหน้าที่จากบริษัท แสน โซลูชั่น จำกัด\n\nเห็นว่าคุณสนใจบริการบัญชีและภาษี และได้คุยกับแอดมินไปแล้ว\n\nเข้าใจว่าคุณได้ทราบราคาแล้ว \n\nมีคำถามเพิ่มเติมเกี่ยวกับแพ็กเกจหรือราคาไหมคะ?",
+      "metadata": {
+        "sessionId": "session-456",
+        "conversationId": "chat-2"
+      }
+    },
+    "actionCard": {
+      "suggestedAction": {
+        "type": "send_proposal",
+        "priority": "high",
+        "reason": "ลูกค้ากำลังเปรียบเทียบราคา ควรส่ง proposal เร็ว",
+        "timeline": "ภายใน 24 ชั่วโมง",
+        "estimatedValue": 180000
+      },
+      "suggestedScript": "สวัสดีค่ะ ฉันเป็นเจ้าหน้าที่จากบริษัท แสน โซลูชั่น จำกัด\n\nเห็นว่าคุณสนใจบริการบัญชีและภาษี และได้คุยกับแอดมินไปแล้ว\n\nเข้าใจว่าคุณได้ทราบราคาแล้ว \n\nมีคำถามเพิ่มเติมเกี่ยวกับแพ็กเกจหรือราคาไหมคะ?",
+      "doNotAsk": [
+        "❌ อย่าถามราคา (ลูกค้าทราบแล้ว)",
+        "❌ อย่าให้ข้อมูลติดต่อซ้ำ (ลูกค้ามีแล้ว)"
+      ]
+    },
+    "conversationHistory": [
+      {
+        "timestamp": "2024-01-16T14:28:00.000Z",
+        "userMessage": "สนใจบริการบัญชี ราคาเท่าไหร่",
+        "aiResponse": "บริการบัญชีเริ่มต้นที่ 15,000 บาท/เดือน สำหรับบริษัทขนาดเล็กค่ะ",
+        "intent": "accounting_pricing"
+      },
+      {
+        "timestamp": "2024-01-16T14:30:00.000Z",
+        "userMessage": "มีแพ็กเกจอื่นไหม ราคาเท่าไหร่",
+        "aiResponse": "มีแพ็กเกจ Premium ที่ 20,000 บาท/เดือน รวมบริการบัญชีและภาษีครบถ้วนค่ะ",
+        "intent": "accounting_pricing"
+      }
+    ]
+  }
+]
