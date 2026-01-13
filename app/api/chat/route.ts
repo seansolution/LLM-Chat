@@ -222,7 +222,8 @@ function buildSystemPrompt(
   knowledge: string, 
   userMessage: string, 
   persona: Persona,
-  role: AIRole = 'SALES'
+  role: AIRole = 'SALES',
+  conversationContext?: string
 ): string {
   const personaPrompt = getSystemPersonaPrompt(persona)
   
@@ -231,7 +232,8 @@ function buildSystemPrompt(
     personaPrompt,
     { responseType: intent.responseType },
     knowledge,
-    userMessage
+    userMessage,
+    conversationContext
   )
 }
 
@@ -240,12 +242,37 @@ export async function POST(req: Request) {
     const body: ReqBody = await req.json().catch(() => ({}))
     const userMessage = (body.message || '').trim()
     const explicitPersona = body.persona
+    
+    // Level 3: Get session ID for conversation tracking
+    const sessionId = body.sessionId || req.headers.get('x-session-id') || `session-${Date.now()}`
+    const userId = body.userId || req.headers.get('x-user-id')
 
     if (!userMessage) {
       return NextResponse.json({ 
         reply: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด มีอะไรให้ช่วยไหมคะ?' 
       }, { status: 400 })
     }
+
+    // Level 3: Load conversation history
+    const { 
+      getConversation, 
+      createConversation, 
+      addMessage, 
+      getConversationContext,
+      summarizeConversation 
+    } = await import('./conversation-storage')
+    
+    let conversation = getConversation(sessionId)
+    if (!conversation) {
+      conversation = createConversation(sessionId, userId)
+    }
+    
+    // Level 3: Add user message to conversation history
+    addMessage(sessionId, {
+      role: 'user',
+      content: userMessage,
+      timestamp: new Date().toISOString(),
+    })
 
     const intentResult = detectIntent(userMessage)
     const detectedPersona = explicitPersona || intentResult.persona
@@ -353,7 +380,16 @@ export async function POST(req: Request) {
       }
     }
 
-    const systemPrompt = buildSystemPrompt(intent, trimmedKnowledge, userMessage, detectedPersona, selectedRole)
+    // Level 3: Get conversation context
+    const conversationContext = getConversationContext(sessionId, 10) // Last 10 messages
+    
+    // Level 3: Check if conversation is too long and needs summarization
+    const summary = summarizeConversation(sessionId, 20)
+    const contextToUse = summary 
+      ? `\n\n=== สรุปบทสนทนาก่อนหน้า ===\n${summary.summary}\n=== จบสรุป ===\n${getConversationContext(sessionId, 10)}`
+      : conversationContext
+    
+    const systemPrompt = buildSystemPrompt(intent, trimmedKnowledge, userMessage, detectedPersona, selectedRole, contextToUse)
 
     const ollamaUrl = 'http://localhost:11434/api/generate'
     const payload = {
@@ -426,6 +462,19 @@ export async function POST(req: Request) {
         console.error('Could not extract reply from Ollama response. Lines:', lines.length)
         return NextResponse.json({ reply: 'ขออภัยค่ะ เกิดข้อผิดพลาดในการอ่านคำตอบ กรุณาติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ' }, { status: 500 })
       }
+      
+      // Level 3: Add assistant response to conversation history
+      addMessage(sessionId, {
+        role: 'assistant',
+        content: reply,
+        timestamp: new Date().toISOString(),
+        intent: intentResult.intent,
+        persona: detectedPersona,
+        metadata: {
+          role: selectedRole,
+          variant: 'A', // Will be updated after A/B testing
+        },
+      })
     } catch (e) {
       console.error('Error parsing Ollama response:', e)
       return NextResponse.json({ reply: 'ขออภัยค่ะ เกิดข้อผิดพลาด กรุณาติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ' }, { status: 500 })
@@ -495,6 +544,20 @@ export async function POST(req: Request) {
       // Apply role-based variant to response (only changes wording, keeps intent/persona identical)
       finalReply = applyRoleVariantToResponse(reply, selectedRole, intent.responseType as 'pricing' | 'overview' | 'greeting', variant)
       
+      // Level 3: Update conversation history with final reply (including variant)
+      const conversation = getConversation(sessionId)
+      if (conversation && conversation.messages.length > 0) {
+        const lastMessage = conversation.messages[conversation.messages.length - 1]
+        if (lastMessage.role === 'assistant') {
+          lastMessage.content = finalReply
+          lastMessage.metadata = {
+            ...lastMessage.metadata,
+            variant,
+            role: selectedRole,
+          }
+        }
+      }
+      
       // Log role-based A/B test metric (in production, store in database)
       console.log(JSON.stringify({
         type: 'role_ab_test_metric',
@@ -515,6 +578,10 @@ export async function POST(req: Request) {
     const sessionIdForLog = body.sessionId || userIdForLog
     const logId = `${sessionIdForLog}-${Date.now()}`
     
+    // Level 3: Get conversation message count
+    const conversation = getConversation(sessionId)
+    const messageCount = conversation?.messages.length || 0
+    
     // Level 4: Include feedback collection info in response
     return NextResponse.json({ 
       reply: finalReply,
@@ -527,6 +594,9 @@ export async function POST(req: Request) {
         reason: 'none',
       },
       confidence: confidence, // Include confidence if provided
+      // Level 3: Multi-turn conversation support
+      sessionId: sessionId, // Return session ID for frontend to use
+      messageCount: messageCount, // Current message count in conversation
       // Level 4: Feedback collection support
       feedbackEnabled: true, // Indicate feedback is available
       feedbackEndpoint: '/api/chat/feedback', // Feedback API endpoint

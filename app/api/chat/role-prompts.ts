@@ -396,7 +396,8 @@ export function buildRolePrompt(
   personaPrompt: string,
   intent: { responseType: 'greeting' | 'overview' | 'pricing' | 'restricted' | 'unknown' },
   knowledge: string,
-  userMessage: string
+  userMessage: string,
+  conversationContext?: string
 ): string {
   const roleConfig = getRoleConfig(role)
   const responseGuideline = roleConfig.responseGuidelines[
@@ -438,6 +439,7 @@ ${responseGuideline}
 
 ข้อมูลบริษัท:
 ${knowledge}
+${conversationContext || ''}
 
 คำถามของผู้ใช้: ${userMessage}
 
