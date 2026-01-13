@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server'
 import { detectIntent, getSystemPersonaPrompt, type Persona, type IntentResult } from './intent'
+import { buildRolePrompt, selectRole, type AIRole } from './role-prompts'
 
-export type { Persona, IntentResult }
+export type { Persona, IntentResult, AIRole }
 
 type ReqBody = {
   message?: string
   persona?: Persona
+  role?: AIRole // AI role: SALES, SUPPORT, or OPS (optional - will be auto-selected if not provided)
   userId?: string // For A/B testing
   sessionId?: string // For A/B testing
   messageCount?: number // For handoff detection (current message count in conversation)
   confidence?: number // Intent confidence score (0-1, optional)
+  flags?: {
+    opsMode?: boolean // Enable OPS mode (forces OPS role)
+    [key: string]: unknown // Allow other flags
+  }
 }
 
 type Intent = {
@@ -211,105 +217,22 @@ function extractSection(content: string, sectionTitle: string): string {
   return sectionLines.join('\n')
 }
 
-function buildSystemPrompt(intent: Intent, knowledge: string, userMessage: string, persona: Persona): string {
-  const contactInfo = `- โทรศัพท์: 086-398-6889
-- อีเมล: zanhcpe@gmail.com
-- เว็บไซต์: https://www.seansolution.co.th
-- ที่อยู่: 92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540`
-
+function buildSystemPrompt(
+  intent: Intent, 
+  knowledge: string, 
+  userMessage: string, 
+  persona: Persona,
+  role: AIRole = 'SALES'
+): string {
   const personaPrompt = getSystemPersonaPrompt(persona)
   
-  const roleEnforcement = `${personaPrompt}
-
-คุณเป็น:
-- เจ้าหน้าที่แชทที่ตอบคำถามลูกค้า
-- ผู้แนะนำบริการของบริษัท
-
-คุณไม่ใช่:
-- ระบบ AI, โทรศัพท์, แพลตฟอร์ม, แอปพลิเคชัน
-- ทนายความ, นักบัญชี, ครูสอน
-- ผู้ให้คำปรึกษาทางกฎหมายหรือภาษี`
-
-  const strictRules = `กฎสำคัญ (ต้องทำตามอย่างเคร่งครัด):
-1. ห้ามบอกว่าคุณเป็นระบบ AI โทรศัพท์ แพลตฟอร์ม หรือแอปพลิเคชัน
-2. ห้ามสร้าง URL เว็บไซต์ หรือข้อมูลติดต่อใหม่
-3. ห้ามสร้างชื่อผลิตภัณฑ์ บริการ หรือแพลตฟอร์มใหม่
-4. ใช้เฉพาะข้อมูลติดต่อที่มีในข้อมูลบริษัทเท่านั้น
-5. ห้ามใช้ placeholder เช่น [website], [contact], [price]
-6. ห้ามอธิบายขั้นตอนเชิงกฎหมาย กระบวนการทางธุรกิจ หรือรายละเอียดเชิงเทคนิค
-7. ห้ามอธิบายวิธีการทำหรือขั้นตอนการทำงาน
-8. ห้ามแต่งคำศัพท์ใหม่หรือใช้คำศัพท์ที่ไม่มีในข้อมูล
-9. ห้ามให้คำแนะนำแทนผู้เชี่ยวชาญหรือให้คำปรึกษาเชิงลึก
-10. ตอบเฉพาะข้อมูลที่มีในข้อมูลบริษัทเท่านั้น
-11. ถ้าลูกค้าถามเรื่องเชิงลึก กฎหมาย ขั้นตอน: ตอบว่า "กรณีนี้เป็นรายละเอียดเชิงลึก เจ้าหน้าที่จะช่วยแนะนำได้ตรงกับสถานการณ์มากกว่าค่ะ"`
-
-  let responseGuidelines = ''
-  
-  if (intent.responseType === 'greeting') {
-    responseGuidelines = `รูปแบบการตอบ (Greeting):
-- ตอบทักทายแบบเป็นมิตร
-- แนะนำตัวเองว่าเป็นเจ้าหน้าที่ของบริษัท แสน โซลูชั่น
-- เชิญชวนให้ถามเกี่ยวกับบริการ
-- ใช้ภาษาไทยสุภาพ เป็นกันเอง`
-  } else if (intent.responseType === 'pricing') {
-    responseGuidelines = `รูปแบบการตอบ (Pricing - ต้องทำตาม):
-1. ระบุชื่อบริการชัดเจน
-2. ระบุราคาชัดเจน พร้อมบอกว่าเป็นรายเดือนหรือครั้งเดียว
-   ตัวอย่าง: "ราคา 2,500 บาท/เดือน" หรือ "ราคา 15,000 บาท (ครั้งเดียว)"
-3. ระบุระยะเวลาโดยประมาณ (ถ้ามี)
-4. จบด้วยการเชิญชวนติดต่อแบบนุ่มนวล
-
-ตัวอย่างคำตอบ:
-"[ชื่อบริการ]
-ค่าบริการอยู่ที่ [ราคา] ([ครั้งเดียว / ต่อเดือน])
-ใช้เวลาประมาณ [ระยะเวลา]
-
-สนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ 😊"`
-  } else if (intent.responseType === 'overview') {
-    responseGuidelines = `รูปแบบการตอบ (Overview):
-- สรุปบริการแบบสั้นๆ (2-4 ประโยค)
-- ระบุว่าเหมาะกับใคร
-- ระบุราคาและระยะเวลา (ถ้ามี)
-- จบด้วยการเชิญชวนติดต่อแบบนุ่มนวล
-
-ใช้คำพูดแบบ:
-- "เหมาะสำหรับ..."
-- "ราคาเริ่มต้นที่..."
-- "เจ้าหน้าที่ช่วยดูให้ตรงกับธุรกิจของคุณ"
-- "เดี๋ยวดูให้ละเอียดให้เลยค่ะ"
-
-หลีกเลี่ยง:
-- "ตามกฎหมาย"
-- "ขั้นตอน"
-- "ต้องดำเนินการ"
-- "ระบบ / แพลตฟอร์ม / โทรศัพท์"`
-  } else if (intent.responseType === 'restricted') {
-    responseGuidelines = `รูปแบบการตอบ (Restricted):
-ตอบแบบนี้เท่านั้น:
-"กรณีนี้เป็นรายละเอียดเชิงลึก เจ้าหน้าที่จะช่วยแนะนำได้ตรงกับสถานการณ์มากกว่าค่ะ
-แนะนำติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ 😊"`
-  } else {
-    responseGuidelines = `รูปแบบการตอบ:
-- ตอบสั้น กระชับ (2-4 ประโยค)
-- ใช้ภาษาไทยสุภาพ เป็นมิตร
-- จบด้วยการเชิญชวนติดต่อ`
-  }
-
-  return `${roleEnforcement}
-
-${strictRules}
-
-ข้อมูลติดต่อที่ถูกต้อง (ใช้เฉพาะนี้เท่านั้น):
-${contactInfo}
-
-${responseGuidelines}
-
-ข้อมูลบริษัท:
-${knowledge}
-
-คำถามของผู้ใช้: ${userMessage}
-
-คำตอบ (สั้น กระชับ เป็นมิตร พร้อม CTA):`
+  return buildRolePrompt(
+    role,
+    personaPrompt,
+    { responseType: intent.responseType },
+    knowledge,
+    userMessage
+  )
 }
 
 export async function POST(req: Request) {
@@ -326,6 +249,21 @@ export async function POST(req: Request) {
 
     const intentResult = detectIntent(userMessage)
     const detectedPersona = explicitPersona || intentResult.persona
+    
+    // ============================================================================
+    // DETERMINISTIC ROLE SELECTION (BEFORE LLM CALL)
+    // ============================================================================
+    // Role MUST be selected before:
+    // - Knowledge loading
+    // - System prompt building
+    // - LLM invocation
+    // Uses: intent, confidence, flags only (deterministic)
+    // ============================================================================
+    const selectedRole: AIRole = body.role || selectRole({
+      intent: intentResult.intent,
+      confidence: body.confidence,
+      flags: body.flags
+    })
     
     // Map intent string to full Intent config for knowledge loading
     const intent = getIntentConfig(intentResult.intent)
@@ -415,7 +353,7 @@ export async function POST(req: Request) {
       }
     }
 
-    const systemPrompt = buildSystemPrompt(intent, trimmedKnowledge, userMessage, detectedPersona)
+    const systemPrompt = buildSystemPrompt(intent, trimmedKnowledge, userMessage, detectedPersona, selectedRole)
 
     const ollamaUrl = 'http://localhost:11434/api/generate'
     const payload = {
@@ -520,31 +458,39 @@ export async function POST(req: Request) {
       reply += '\n\nสนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ 😊'
     }
 
-    // A/B Testing: Apply variant to response
+    // ============================================================================
+    // ROLE-BASED A/B TESTING
+    // ============================================================================
+    // Intent and persona remain IDENTICAL across variants
+    // Only wording (CTA, emphasis) differs
+    // ============================================================================
     let finalReply = reply
     let variant: 'A' | 'B' = 'A'
     
-    if (intent.responseType === 'pricing' || intent.responseType === 'overview') {
+    if (intent.responseType === 'pricing' || intent.responseType === 'overview' || intent.responseType === 'greeting') {
       // Get user ID from request (session ID, user ID, or generate from IP)
       const userId = body.userId || body.sessionId || req.headers.get('x-forwarded-for') || 'anonymous'
       
-      // Import A/B testing functions
-      const { assignVariant, applyVariantToResponse } = await import('./ab-testing')
+      // Import role-based A/B testing functions
+      const { assignVariant, applyRoleVariantToResponse } = await import('./role-ab-testing')
       
-      // Assign variant deterministically
-      variant = assignVariant(userId, intent.responseType)
+      // Assign variant deterministically (same user + same role + same response type = same variant)
+      variant = assignVariant(userId, selectedRole, intent.responseType as 'pricing' | 'overview' | 'greeting')
       
-      // Apply variant to response (only changes CTA, keeps main content)
-      finalReply = applyVariantToResponse(reply, intent.responseType, variant, userId)
+      // Apply role-based variant to response (only changes wording, keeps intent/persona identical)
+      finalReply = applyRoleVariantToResponse(reply, selectedRole, intent.responseType as 'pricing' | 'overview' | 'greeting', variant)
       
-      // Log A/B test metric (in production, store in database)
+      // Log role-based A/B test metric (in production, store in database)
       console.log(JSON.stringify({
-        type: 'ab_test_metric',
+        type: 'role_ab_test_metric',
+        role: selectedRole,
         variant,
         responseType: intent.responseType,
         userId,
+        sessionId: body.sessionId,
         intent: intentResult.intent,
         persona: detectedPersona,
+        // Intent and persona are IDENTICAL across variants
         timestamp: new Date().toISOString(),
       }))
     }
@@ -553,6 +499,7 @@ export async function POST(req: Request) {
       reply: finalReply,
       intent: intentResult.intent,
       persona: detectedPersona,
+      role: selectedRole, // Include role in response for tracking
       variant: variant, // Include variant in response for tracking
       handoff: {
         status: 'none',

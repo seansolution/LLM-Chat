@@ -1,0 +1,223 @@
+{
+  "dashboard": {
+    "title": "AI Chat Role-Based Dashboards",
+    "tags": ["ai", "chat", "roles", "sales", "support", "ops"],
+    "timezone": "browser",
+    "schemaVersion": 27,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "AI Sales - Pricing Answer Rate",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0},
+        "targets": [{
+          "rawSql": "SELECT COUNT(*) FILTER (WHERE log_data->'pricing'->>'questionType' = 'explicit' AND (log_data->'pricing'->>'containsPrice')::boolean = true)::numeric / NULLIF(COUNT(*) FILTER (WHERE log_data->'pricing'->>'questionType' = 'explicit'), 0)::numeric * 100 as value FROM chat_logs WHERE $__timeFilter(timestamp) AND log_data->>'role' = 'SALES'",
+          "format": "table",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 90, "color": "yellow"},
+                {"value": 95, "color": "green"}
+              ]
+            }
+          }
+        },
+        "alert": {
+          "conditions": [{
+            "evaluator": {"params": [90], "type": "lt"},
+            "operator": {"type": "and"},
+            "query": {"params": ["A", "5m", "now"]},
+            "reducer": {"type": "last", "params": []},
+            "type": "query"
+          }]
+        }
+      },
+      {
+        "id": 2,
+        "title": "AI Sales - Conversion to Contact",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0},
+        "targets": [{
+          "rawSql": "SELECT $__timeGroupAlias(timestamp, '1h'), COUNT(*) FILTER (WHERE log_data->'handoff'->>'status' IN ('requested', 'completed'))::numeric / NULLIF(COUNT(*), 0)::numeric * 100 as rate FROM chat_logs WHERE $__timeFilter(timestamp) AND log_data->>'role' = 'SALES' GROUP BY 1 ORDER BY 1",
+          "format": "time_series",
+          "refId": "A"
+        }],
+        "yaxes": [{"format": "percent", "max": 100}]
+      },
+      {
+        "id": 3,
+        "title": "AI Support - Question Answer Rate",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0},
+        "targets": [{
+          "rawSql": "SELECT COUNT(*) FILTER (WHERE log_data->'handoff'->>'status' = 'none')::numeric / NULLIF(COUNT(*), 0)::numeric * 100 as value FROM chat_logs WHERE $__timeFilter(timestamp) AND log_data->>'role' = 'SUPPORT'",
+          "format": "table",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 60, "color": "yellow"},
+                {"value": 70, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "AI Support - Handoff Rate Trend",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0},
+        "targets": [{
+          "rawSql": "SELECT $__timeGroupAlias(timestamp, '1h'), COUNT(*) FILTER (WHERE log_data->'handoff'->>'status' IN ('requested', 'completed'))::numeric / NULLIF(COUNT(*), 0)::numeric * 100 as rate FROM chat_logs WHERE $__timeFilter(timestamp) AND log_data->>'role' = 'SUPPORT' GROUP BY 1 ORDER BY 1",
+          "format": "time_series",
+          "refId": "A"
+        }],
+        "yaxes": [{"format": "percent", "max": 100}],
+        "alert": {
+          "conditions": [{
+            "evaluator": {"params": [40], "type": "gt"},
+            "operator": {"type": "and"},
+            "query": {"params": ["A", "5m", "now"]},
+            "reducer": {"type": "last", "params": []},
+            "type": "query"
+          }]
+        }
+      },
+      {
+        "id": 5,
+        "title": "AI Ops - System Quality Score",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 8},
+        "targets": [{
+          "rawSql": "SELECT ROUND(((COUNT(*) FILTER (WHERE (log_data->'quality'->>'intentCorrect')::boolean = true)::numeric / NULLIF(COUNT(*), 0)::numeric * 0.3) + (COUNT(*) FILTER (WHERE (log_data->'quality'->>'personaCorrect')::boolean = true)::numeric / NULLIF(COUNT(*), 0)::numeric * 0.3) + (COUNT(*) FILTER (WHERE (log_data->'safety'->>'violationCount')::int = 0)::numeric / NULLIF(COUNT(*), 0)::numeric * 0.4)) * 100, 2) as value FROM chat_logs WHERE $__timeFilter(timestamp)",
+          "format": "table",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "none",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 75, "color": "yellow"},
+                {"value": 85, "color": "green"}
+              ]
+            }
+          }
+        },
+        "alert": {
+          "conditions": [{
+            "evaluator": {"params": [75], "type": "lt"},
+            "operator": {"type": "and"},
+            "query": {"params": ["A", "5m", "now"]},
+            "reducer": {"type": "last", "params": []},
+            "type": "query"
+          }]
+        }
+      },
+      {
+        "id": 6,
+        "title": "AI Ops - Risk Detection Timeline",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 8},
+        "targets": [{
+          "rawSql": "SELECT $__timeGroupAlias(timestamp, '1h'), COUNT(*) FILTER (WHERE (log_data->'safety'->>'violationCount')::int > 0 OR (log_data->'quality'->>'intentCorrect')::boolean = false) as risks FROM chat_logs WHERE $__timeFilter(timestamp) GROUP BY 1 ORDER BY 1",
+          "format": "time_series",
+          "refId": "A"
+        }],
+        "alert": {
+          "conditions": [{
+            "evaluator": {"params": [10], "type": "gt"},
+            "operator": {"type": "and"},
+            "query": {"params": ["A", "5m", "now"]},
+            "reducer": {"type": "max", "params": []},
+            "type": "query"
+          }]
+        }
+      },
+      {
+        "id": 7,
+        "title": "Forbidden Violations (All Roles)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8},
+        "targets": [{
+          "rawSql": "SELECT COUNT(*) as value FROM chat_logs WHERE $__timeFilter(timestamp) AND (log_data->'safety'->>'violationCount')::int > 0",
+          "format": "table",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 1, "color": "red"}
+              ]
+            }
+          }
+        },
+        "alert": {
+          "conditions": [{
+            "evaluator": {"params": [0], "type": "gt"},
+            "operator": {"type": "and"},
+            "query": {"params": ["A", "5m", "now"]},
+            "reducer": {"type": "last", "params": []},
+            "type": "query"
+          }]
+        }
+      },
+      {
+        "id": 8,
+        "title": "Role Distribution",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 8},
+        "targets": [{
+          "rawSql": "SELECT log_data->>'role' as role, COUNT(*) as count FROM chat_logs WHERE $__timeFilter(timestamp) AND log_data->>'role' IN ('SALES', 'SUPPORT', 'OPS') GROUP BY role",
+          "format": "table",
+          "refId": "A"
+        }]
+      },
+      {
+        "id": 9,
+        "title": "Cross-Role Comparison",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [{
+          "rawSql": "SELECT log_data->>'role' as role, COUNT(*) as total_conversations, ROUND(AVG((log_data->'performance'->>'responseTimeMs')::numeric), 0) as avg_response_time_ms, ROUND(COUNT(*) FILTER (WHERE (log_data->'safety'->>'violationCount')::int > 0)::numeric / NULLIF(COUNT(*), 0)::numeric * 100, 2) as forbidden_rate, ROUND(COUNT(*) FILTER (WHERE (log_data->'quality'->>'intentCorrect')::boolean = true)::numeric / NULLIF(COUNT(*), 0)::numeric * 100, 2) as intent_accuracy FROM chat_logs WHERE $__timeFilter(timestamp) AND log_data->>'role' IN ('SALES', 'SUPPORT', 'OPS') GROUP BY role ORDER BY role",
+          "format": "table",
+          "refId": "A"
+        }]
+      }
+    ],
+    "time": {"from": "now-24h", "to": "now"},
+    "timepicker": {},
+    "templating": {
+      "list": []
+    },
+    "annotations": {
+      "list": []
+    }
+  }
+}

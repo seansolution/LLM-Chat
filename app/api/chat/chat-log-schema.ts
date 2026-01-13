@@ -114,9 +114,12 @@ export interface ChatLogSchema {
   
   // ===== A/B TESTING =====
   abTesting: {
-    variant: ABTestVariant // A/B test variant assigned
-    responseType: 'pricing' | 'overview' | 'none' // Response type tested
+    variant: ABTestVariant // A/B test variant assigned (A or B)
+    role: 'SALES' | 'SUPPORT' | 'OPS' | 'none' // AI role for this response
+    responseType: 'pricing' | 'overview' | 'greeting' | 'restricted' | 'none' // Response type tested
     ctaVariant?: 'standard' | 'urgent' | 'soft' // CTA variant used
+    // Note: Intent and persona MUST be identical across variants
+    // Only wording (CTA, emphasis) differs
   }
   
   // ===== USER ACTIONS =====
