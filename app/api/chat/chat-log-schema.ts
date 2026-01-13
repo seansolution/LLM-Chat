@@ -132,6 +132,15 @@ export interface ChatLogSchema {
     conversationEndedAt?: string // ISO 8601 timestamp when conversation ended
   }
   
+  // ===== USER FEEDBACK (Level 4) =====
+  feedback?: {
+    type: 'thumbs_up' | 'thumbs_down' | 'rating' | 'comment' | 'none'
+    rating?: number // 1-5 if type is 'rating'
+    comment?: string // Optional text feedback
+    submittedAt?: string // ISO 8601 timestamp when feedback was submitted
+    timeToFeedback?: number // Seconds from response to feedback submission
+  }
+  
   // ===== PERFORMANCE =====
   performance: {
     responseTimeMs: number // Time to generate response (milliseconds)

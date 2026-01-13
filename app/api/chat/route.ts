@@ -459,10 +459,11 @@ export async function POST(req: Request) {
     }
 
     // ============================================================================
-    // ROLE-BASED A/B TESTING
+    // ROLE-BASED A/B TESTING + AUTO-OPTIMIZATION (Level 4)
     // ============================================================================
     // Intent and persona remain IDENTICAL across variants
     // Only wording (CTA, emphasis) differs
+    // Level 4: Auto-optimization selects winning variant automatically
     // ============================================================================
     let finalReply = reply
     let variant: 'A' | 'B' = 'A'
@@ -470,12 +471,26 @@ export async function POST(req: Request) {
     if (intent.responseType === 'pricing' || intent.responseType === 'overview' || intent.responseType === 'greeting') {
       // Get user ID from request (session ID, user ID, or generate from IP)
       const userId = body.userId || body.sessionId || req.headers.get('x-forwarded-for') || 'anonymous'
+      const sessionId = body.sessionId || userId
       
-      // Import role-based A/B testing functions
+      // Import role-based A/B testing and auto-optimization functions
       const { assignVariant, applyRoleVariantToResponse } = await import('./role-ab-testing')
+      const { getOptimizedVariant } = await import('./auto-optimization')
+      const { loadOptimizationDecision } = await import('./optimization-storage')
       
-      // Assign variant deterministically (same user + same role + same response type = same variant)
-      variant = assignVariant(userId, selectedRole, intent.responseType as 'pricing' | 'overview' | 'greeting')
+      // Level 4: Load optimization decision (auto-optimization)
+      const optimizationDecision = await loadOptimizationDecision(
+        selectedRole,
+        intent.responseType as 'pricing' | 'overview' | 'greeting'
+      )
+      
+      // Level 4: Get optimized variant (uses winning variant if available)
+      variant = await getOptimizedVariant(
+        userId,
+        selectedRole,
+        intent.responseType as 'pricing' | 'overview' | 'greeting',
+        optimizationDecision
+      )
       
       // Apply role-based variant to response (only changes wording, keeps intent/persona identical)
       finalReply = applyRoleVariantToResponse(reply, selectedRole, intent.responseType as 'pricing' | 'overview' | 'greeting', variant)
@@ -495,6 +510,12 @@ export async function POST(req: Request) {
       }))
     }
 
+    // Generate log ID for feedback collection
+    const userIdForLog = body.userId || body.sessionId || req.headers.get('x-forwarded-for') || 'anonymous'
+    const sessionIdForLog = body.sessionId || userIdForLog
+    const logId = `${sessionIdForLog}-${Date.now()}`
+    
+    // Level 4: Include feedback collection info in response
     return NextResponse.json({ 
       reply: finalReply,
       intent: intentResult.intent,
@@ -506,6 +527,10 @@ export async function POST(req: Request) {
         reason: 'none',
       },
       confidence: confidence, // Include confidence if provided
+      // Level 4: Feedback collection support
+      feedbackEnabled: true, // Indicate feedback is available
+      feedbackEndpoint: '/api/chat/feedback', // Feedback API endpoint
+      logId: logId, // Log ID for feedback collection
     })
   } catch (err) {
     console.error('Unexpected error in /api/chat', err)
