@@ -122,12 +122,19 @@ export function getConversationContext(
   }
   
   // Format conversation history for system prompt
-  const formatted = history.map((msg, index) => {
+  // Exclude the current user message (last message) from context
+  const contextMessages = history.slice(0, -1) // Remove last message (current user message)
+  
+  if (contextMessages.length === 0) {
+    return ''
+  }
+  
+  const formatted = contextMessages.map((msg, index) => {
     const role = msg.role === 'user' ? 'ผู้ใช้' : 'AI'
     return `${index + 1}. ${role}: ${msg.content}`
   }).join('\n')
   
-  return `\n\n=== บทสนทนาก่อนหน้า ===\n${formatted}\n=== จบบทสนทนาก่อนหน้า ===\n`
+  return `\n\n=== บทสนทนาก่อนหน้า ===\n${formatted}\n=== จบบทสนทนาก่อนหน้า ===\n\nหมายเหตุ: ใช้บริบทจากบทสนทนาก่อนหน้าเพื่อตอบคำถามปัจจุบันให้สอดคล้องและต่อเนื่อง`
 }
 
 /**

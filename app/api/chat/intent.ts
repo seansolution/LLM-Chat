@@ -6,6 +6,21 @@ export interface IntentResult {
 }
 
 export const INTENT_RULES = [
+  // GREETING (highest priority - check first)
+  {
+    intent: "greeting",
+    persona: "REGISTRATION",
+    keywords: [
+      "สวัสดี",
+      "hello",
+      "hi",
+      "หวัดดี",
+      "ดี",
+      "สบายดี",
+      "hey"
+    ],
+  },
+  
   // REGISTRATION
   {
     intent: "company_registration_pricing",
@@ -47,6 +62,23 @@ export const INTENT_RULES = [
       "ประกันสังคม",
       "เลิกจ้าง",
       "สัญญาจ้าง"
+    ],
+  },
+  
+  // GENERAL SERVICES (catch-all for service inquiries)
+  {
+    intent: "services_overview",
+    persona: "REGISTRATION",
+    keywords: [
+      "สนใจ",
+      "บริการ",
+      "service",
+      "มีอะไร",
+      "บริการอะไร",
+      "ทำอะไร",
+      "ช่วยอะไร",
+      "ต้องการ",
+      "อยากรู้"
     ],
   },
 ] as const;

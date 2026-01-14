@@ -210,7 +210,13 @@ export function applyRoleVariantToResponse(
 ): string {
   const roleVariants = getRoleVariants(role, variant)
   
-  // Remove existing CTA patterns
+  // Check if response already has a CTA
+  const hasCTA = /สนใจสอบถาม.*(รายละเอียด|เพิ่มเติม|เจ้าหน้าที่ช่วยดู)/i.test(originalResponse) ||
+                 /ต้องการให้เจ้าหน้าที่ช่วยดูให้ตรง/i.test(originalResponse) ||
+                 /พร้อมเริ่มต้นได้เลย/i.test(originalResponse) ||
+                 /ต้องการคำแนะนำเฉพาะเจาะจง/i.test(originalResponse)
+  
+  // Remove existing CTA patterns only if we're going to add a new one
   const ctaPatterns = [
     /สนใจสอบถาม.*zanhcpe@gmail\.com.*😊/i,
     /ติดต่อ.*086-398-6889.*zanhcpe@gmail\.com/i,
@@ -222,8 +228,14 @@ export function applyRoleVariantToResponse(
   ]
   
   let cleanedResponse = originalResponse
-  for (const pattern of ctaPatterns) {
-    cleanedResponse = cleanedResponse.replace(pattern, '').trim()
+  // Only remove CTA if we're going to add a new variant CTA
+  if (!hasCTA) {
+    for (const pattern of ctaPatterns) {
+      cleanedResponse = cleanedResponse.replace(pattern, '').trim()
+    }
+  } else {
+    // Response already has CTA, return as-is
+    return originalResponse
   }
   
   // Get variant-specific CTA based on role and response type

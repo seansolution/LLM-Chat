@@ -2,17 +2,23 @@
 node_modules/
 .pnp
 .pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
 
 # Testing
 coverage/
 .nyc_output/
 *.lcov
+.jest/
 
 # Next.js
 .next/
 out/
 build/
 dist/
+.vercel
 
 # Production
 *.log
@@ -29,35 +35,58 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 
-# Vercel
-.vercel
-
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
 
-# IDE
+# IDE / Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
+*.sublime-project
+*.sublime-workspace
 
 # OS
-Thumbs.db
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
 
 # Misc
 .cache/
 .temp/
 .tmp/
 *.pem
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.key
+*.cert
 
 # Local development
 .local/
+.localhost
+
+# Database (if using local DB)
+*.db
+*.sqlite
+*.sqlite3
+
+# AI/ML models (if storing locally)
+*.model
+*.bin
+*.gguf
+*.safetensors
+models/
+
+# Logs and debugging
+logs/
+*.log.*
+debug.log
+
+# Package manager locks (optional - keep pnpm-lock.yaml but ignore others)
+package-lock.json
+yarn.lock
