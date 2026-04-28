@@ -15,7 +15,7 @@ describe('Conversation Analysis', () => {
       sessionId: 'session-123',
       timestamp: '2024-01-15T10:00:00.000Z',
       userMessage: 'สวัสดีครับ สนใจจดทะเบียนบริษัท',
-      aiResponse: 'สวัสดีค่ะ! ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด',
+      aiResponse: 'สวัสดีค่ะ! ยินดีต้อนรับสู่บริษัท ABC จำกัด',
       intent: { detected: 'greeting' as const },
       persona: { detected: 'REGISTRATION' as const },
       responseType: 'greeting' as const,

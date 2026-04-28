@@ -1,17 +1,24 @@
 # Coding Rules
 
 ## Tech Stack
-- Node.js
-- Express
-- JavaScript (ESM)
-- Package manager: pnpm
+- Frontend: Next.js (App Router), TypeScript, Tailwind CSS, pnpm
+- Backend: Python 3.11, FastAPI, SQLAlchemy (async), Pydantic v2
+- Infrastructure: Docker Compose (see docker-compose.yml)
+- Package manager: pnpm (frontend), pip (backend)
 
 ## Rules
-- เขียนโค้ดให้อ่านง่าย
-- หลีกเลี่ยง abstraction เกินจำเป็น
-- ไม่ใช้ framework เพิ่มโดยไม่จำเป็น
-- ไม่ hardcode business logic นอก knowledge
+- Write readable, minimal code — no unnecessary abstraction
+- Backend: async everywhere (asyncpg, httpx, nats-py)
+- Frontend: proxy all /api/* to FastAPI via next.config.js rewrites
+- No hardcoded secrets — use .env / environment variables
+- No business logic outside knowledge files or RAG prompt
 
 ## Error Handling
-- ถ้า Ollama error → return 500
-- อย่า swallow error
+- FastAPI: raise HTTPException with appropriate status codes
+- Workers: catch exceptions, set document.status = "failed", ack message
+- Frontend: display error text from API response
+
+## Observability
+- All FastAPI routes are auto-instrumented by prometheus-fastapi-instrumentator
+- Use Langfuse for LLM trace logging
+- Structured logs with [service] prefix

@@ -2,7 +2,7 @@
 
 **The Highest Governing Document for AI Systems**
 
-**Organization:** บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)  
+**Organization:** บริษัท ABC จำกัด (สำนักงานใหญ่)  
 **Effective Date:** [Date]  
 **Version:** 1.0  
 **Status:** Active  
@@ -12,7 +12,7 @@
 
 ## Preamble
 
-This Charter establishes the foundational principles, governance structure, and ethical framework for all Artificial Intelligence (AI) systems operated by บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่). This Charter is the highest governing document for AI operations and supersedes all other AI-related policies, procedures, and guidelines.
+This Charter establishes the foundational principles, governance structure, and ethical framework for all Artificial Intelligence (AI) systems operated by บริษัท ABC จำกัด (สำนักงานใหญ่). This Charter is the highest governing document for AI operations and supersedes all other AI-related policies, procedures, and guidelines.
 
 **Authority:** This Charter is approved by the Board of Directors and Executive Team and is binding on all personnel, systems, and operations.
 

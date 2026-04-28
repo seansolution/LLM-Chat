@@ -87,34 +87,36 @@ export interface SuggestedAction {
 // SUMMARY GENERATION
 // ============================================================================
 
+type ChatLog = {
+  id: string
+  sessionId: string
+  timestamp: string
+  userMessage: string
+  aiResponse: string
+  intent: { detected: Intent }
+  persona: { detected: Persona }
+  responseType: string
+  pricing?: {
+    questionType: string
+    containsPrice: boolean
+    priceValue?: string
+  }
+  handoff?: {
+    reason: HandoffReason
+    requestedAt?: string
+  }
+  metadata?: {
+    userEmail?: string
+    userPhone?: string
+    userCompany?: string
+  }
+}
+
 /**
  * Generate conversation summary from chat logs
  */
 export function generateConversationSummary(
-  chatLogs: Array<{
-    id: string
-    sessionId: string
-    timestamp: string
-    userMessage: string
-    aiResponse: string
-    intent: { detected: Intent }
-    persona: { detected: Persona }
-    responseType: string
-    pricing?: {
-      questionType: string
-      containsPrice: boolean
-      priceValue?: string
-    }
-    handoff?: {
-      reason: HandoffReason
-      requestedAt?: string
-    }
-    metadata?: {
-      userEmail?: string
-      userPhone?: string
-      userCompany?: string
-    }
-  }>
+  chatLogs: ChatLog[]
 ): ConversationSummary {
   if (chatLogs.length === 0) {
     throw new Error('Cannot generate summary from empty conversation')
@@ -234,7 +236,7 @@ export function generateConversationSummary(
 // ============================================================================
 
 function generateSummaryText(
-  logs: typeof chatLogs,
+  logs: ChatLog[],
   persona: Persona,
   intent: Intent
 ): string {
@@ -274,7 +276,7 @@ function generateSummaryText(
   return summary
 }
 
-function extractTopics(logs: typeof chatLogs): string[] {
+function extractTopics(logs: ChatLog[]): string[] {
   const topics = new Set<string>()
   
   const topicKeywords: Record<string, string[]> = {
@@ -299,7 +301,7 @@ function extractTopics(logs: typeof chatLogs): string[] {
   return Array.from(topics).slice(0, 5)
 }
 
-function extractQuestions(logs: typeof chatLogs): string[] {
+function extractQuestions(logs: ChatLog[]): string[] {
   const questions: string[] = []
   
   logs.forEach(log => {
@@ -323,7 +325,7 @@ function extractQuestions(logs: typeof chatLogs): string[] {
   return questions.slice(0, 5)
 }
 
-function extractPrices(logs: typeof chatLogs): string[] {
+function extractPrices(logs: ChatLog[]): string[] {
   const prices: string[] = []
   
   logs.forEach(log => {
@@ -347,7 +349,7 @@ function extractPrices(logs: typeof chatLogs): string[] {
 }
 
 function extractKeyPoints(
-  logs: typeof chatLogs,
+  logs: ChatLog[],
   topics: string[],
   questions: string[]
 ): string[] {
@@ -392,7 +394,7 @@ function extractKeyPoints(
 }
 
 function detectBuyingIntent(
-  logs: typeof chatLogs,
+  logs: ChatLog[],
   questions: string[],
   prices: string[]
 ): BuyingIntent {
@@ -442,7 +444,7 @@ function detectBuyingIntent(
 }
 
 function detectUrgency(
-  logs: typeof chatLogs,
+  logs: ChatLog[],
   buyingIntent: BuyingIntent
 ): UrgencyLevel {
   if (buyingIntent === 'urgent') {
@@ -472,7 +474,7 @@ function detectUrgency(
 }
 
 function determineAlreadyAnswered(
-  logs: typeof chatLogs,
+  logs: ChatLog[],
   prices: string[]
 ): ConversationSummary['alreadyAnswered'] {
   const allText = logs.map(log => log.aiResponse).join(' ').toLowerCase()
@@ -596,7 +598,7 @@ function generateSuggestedScript(
 
   const personaLabel = personaLabels[persona]
 
-  let script = `${greeting} ฉันเป็นเจ้าหน้าที่จากบริษัท แสน โซลูชั่น จำกัด\n\n`
+  let script = `${greeting} ฉันเป็นเจ้าหน้าที่จากบริษัท ABC จำกัด\n\n`
   script += `เห็นว่าคุณสนใจ${personaLabel} และได้คุยกับแอดมินไปแล้ว\n\n`
 
   // Avoid repeating what's already answered

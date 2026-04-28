@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1
+# Target: linux/arm64 (Apple Silicon M1/M2/M3/M4)
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+RUN pnpm build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+# standalone output bundles server.js + node_modules subset
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# public/ is optional — only copy if it exists
+COPY --from=builder /app/public* ./public/
+
+# knowledge files are read at runtime via fs.readFile
+COPY --from=builder /app/app/knowledge ./app/knowledge
+
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]

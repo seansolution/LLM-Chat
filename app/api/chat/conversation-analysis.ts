@@ -155,39 +155,41 @@ export interface OptimizationRecommendation {
 // CONVERSATION ANALYSIS
 // ============================================================================
 
+type ConversationLog = {
+  id: string
+  sessionId: string
+  userId?: string
+  timestamp: string
+  userMessage: string
+  aiResponse: string
+  intent: { detected: Intent }
+  persona: { detected: Persona }
+  responseType: 'greeting' | 'overview' | 'pricing' | 'restricted' | 'unknown'
+  pricing?: {
+    questionType: string
+    containsPrice: boolean
+  }
+  handoff?: {
+    reason: HandoffReason
+    requestedAt?: string
+  }
+  userActions?: {
+    contactMethod: string
+    contactedAt?: string
+  }
+  abTesting?: {
+    variant: 'A' | 'B' | 'none'
+  }
+  performance?: {
+    responseTimeMs: number
+  }
+}
+
 /**
  * Analyze a single conversation (session)
  */
 export function analyzeConversation(
-  chatLogs: Array<{
-    id: string
-    sessionId: string
-    userId?: string
-    timestamp: string
-    userMessage: string
-    aiResponse: string
-    intent: { detected: Intent }
-    persona: { detected: Persona }
-    responseType: 'greeting' | 'overview' | 'pricing' | 'restricted' | 'unknown'
-    pricing?: {
-      questionType: string
-      containsPrice: boolean
-    }
-    handoff?: {
-      reason: HandoffReason
-      requestedAt?: string
-    }
-    userActions?: {
-      contactMethod: string
-      contactedAt?: string
-    }
-    abTesting?: {
-      variant: 'A' | 'B' | 'none'
-    }
-    performance?: {
-      responseTimeMs: number
-    }
-  }>
+  chatLogs: ConversationLog[]
 ): ConversationMetrics {
   if (chatLogs.length === 0) {
     throw new Error('Cannot analyze empty conversation')
@@ -494,7 +496,7 @@ export function analyzeConversations(
 // ============================================================================
 
 function determineDropOffPoint(
-  logs: typeof chatLogs,
+  logs: ConversationLog[],
   outcome: ConversationOutcome
 ): DropOffPoint {
   if (outcome !== 'dropped_off') {
@@ -527,7 +529,7 @@ function determineDropOffPoint(
 }
 
 function generateOptimizationFlags(
-  logs: typeof chatLogs,
+  logs: ConversationLog[],
   outcome: ConversationOutcome,
   dropOffPoint: DropOffPoint,
   turnsToConversion?: number,
@@ -619,7 +621,6 @@ function generateOptimizationFlags(
       severity: 'low',
       description: `Conversion took ${turnsToConversion} turns - may be too long`,
       suggestion: 'Optimize conversation flow to reduce turns to conversion',
-      priority: 'low',
     })
   }
 

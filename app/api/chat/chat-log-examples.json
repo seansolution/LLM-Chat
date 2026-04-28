@@ -188,7 +188,7 @@
     },
     "responseType": "overview",
     "userMessage": "บริษัทอยู่ที่ไหน",
-    "aiResponse": "บริษัท แสน โซลูชั่น จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com",
+    "aiResponse": "บริษัท ABC จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com",
     "knowledgeSources": ["company.md"],
     "pricing": {
       "questionType": "none",
@@ -236,7 +236,7 @@
     },
     "responseType": "greeting",
     "userMessage": "สวัสดี",
-    "aiResponse": "สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด มีอะไรให้ช่วยไหมคะ?",
+    "aiResponse": "สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด มีอะไรให้ช่วยไหมคะ?",
     "knowledgeSources": ["company.md"],
     "pricing": {
       "questionType": "none",

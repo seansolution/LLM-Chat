@@ -40,7 +40,7 @@ export interface Deal {
   
   // Attribution Confidence
   attributionConfidence: number // 0-1, how confident we are in attribution
-  attributionMethod: 'direct' | 'session_match' | 'email_match' | 'phone_match' | 'manual' | 'unknown
+  attributionMethod: 'direct' | 'session_match' | 'email_match' | 'phone_match' | 'manual' | 'unknown'
   
   // Sales Process
   firstContactDate?: string // ISO 8601 timestamp of first human contact
@@ -84,7 +84,7 @@ export function attributeDealToConversation(
     timestamp: string
     intent: { detected: Intent }
     persona: { detected: Persona }
-    userActions: {
+    userActions?: {
       contactMethod: string
       contactedAt?: string
     }
@@ -263,10 +263,19 @@ export function calculateRevenueMetrics(
   conversations: Array<{
     id: string
     sessionId: string
+    userId?: string
     intent: { detected: Intent }
     persona: { detected: Persona }
     responseType: string
     timestamp: string
+    userActions?: {
+      contactMethod: string
+      contactedAt?: string
+    }
+    metadata?: {
+      userEmail?: string
+      userPhone?: string
+    }
   }>
 ): RevenueMetrics {
   // Filter to closed won deals only

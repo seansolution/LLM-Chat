@@ -9,7 +9,7 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: 'SEAN SOLUTION - AI Assistant',
+  title: 'SEAN - AI Assistant',
   description: 'AI Assistant powered by Mistral',
 }
 
@@ -20,6 +20,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        {/*
+          Anti-flash theme script — runs synchronously before React hydrates
+          so there is no dark→light flicker on page load.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var p=window.matchMedia('(prefers-color-scheme: light)').matches;if(t==='light'||(t===null&&p))document.documentElement.classList.add('light-mode');}catch(e){}})();`
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
         {children}
       </body>

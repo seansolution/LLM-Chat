@@ -1,185 +1,285 @@
-# Mistral Mini Chat (Next Server)
+# RAG Platform — Access URLs
 
-Minimal Next.js (App Router) project that demonstrates a server-side-only RAG (Retrieval-Augmented Generation) system using Mistral via Ollama. The web UI is SSR for initial load and uses a client component for chat interactions.
+Enterprise RAG platform running on Apple Silicon (M-series).
+LLM is served by **LM Studio** on the host — must be running before starting services.
 
-## Features
+---
 
-- **RAG System**: Loads knowledge from multiple Markdown files
-- **Local LLM**: Uses Mistral 7B via Ollama for local inference
-- **Thai Language Support**: Optimized for Thai business law and services knowledge
-- **Knowledge Base**: Comprehensive knowledge about accounting, tax, company registration, work permits, and services
-- **Quality Assurance**: Safety gates, quality dashboard, A/B testing, chat log schema
-- **AI Maturity**: Level 4 (Adaptive - Learning & Optimization) ✅
-  - **Current State**: 
-    - Level 2 (Structured) complete ✅
-    - Level 3 (Intelligent) complete ✅ (persona routing ✅, context/multi-turn ✅, conversation summarization ✅)
-    - Level 4 (Adaptive) complete ✅
-  - **Level 2 Capabilities**: ✅ Intent detection, persona routing, A/B testing, safety gates, quality monitoring
-  - **Level 4 Capabilities**: ✅ 
-    - Feedback collection integrated with chat flow
-    - Auto-optimization activated (using optimization decisions)
-    - Continuous improvement loop (scheduler + API endpoint)
-  - **Next Target**: Level 5 (Autonomous) - Self-improvement and anomaly detection
-  - **See**: [AI Maturity Roadmap](app/api/chat/AI_MATURITY_ROADMAP.md) and [Level 4 Activation](app/api/chat/LEVEL_4_ACTIVATION.md) for details
+## Quick Start
 
-## Prerequisites
+```bash
+# Requires LM Studio running first:
+#   - nvidia/nemotron-3-nano-4b (chat / reasoning)
+#   - google/gemma-3-4b (vision, optional)
+#   - text-embedding-nomic-embed-text-v1.5 (embeddings)
 
-- Node.js >= 18
-- Ollama running at http://localhost:11434
-- Mistral model installed in Ollama:
-  ```bash
-  ollama pull mistral
-  ```
+make setup   # first time
+make up      # subsequent starts
+make down    # stop all
+make logs    # tail backend + worker logs
+make clean   # destroy all volumes (destructive)
+```
 
-## Installation
+---
+
+## Build Commands (Full)
+
+### 1) Install dependencies (local)
 
 ```bash
 pnpm install
 ```
 
-## Import Knowledge Data (Optional)
-
-If you have CSV files with knowledge chunks and services, you can import them:
+### 2) Build all Docker services
 
 ```bash
-# Import knowledge chunks from CSV
-node scripts/import-knowledge.js
-
-# Import services from CSV
-node scripts/import-services.js
+docker compose build
 ```
 
-**Note**: Update the CSV file paths in the scripts if your files are in a different location.
-
-## Running the Project
+### 3) Build only frontend (when UI/API code changed)
 
 ```bash
-pnpm dev
+docker compose build frontend
+docker compose up -d frontend
 ```
 
-The application will be available at http://localhost:3000
+### 4) Rebuild from scratch (force image refresh)
 
-## Project Structure
-
-```
-mini-llm/
-├── app/
-│   ├── api/
-│   │   └── chat/
-│   │       └── route.ts          # API endpoint that loads knowledge and calls Ollama
-│   ├── components/
-│   │   └── ClientChat.tsx        # Client-side chat UI component
-│   ├── knowledge/                # Knowledge base (Markdown files)
-│   │   ├── company.md            # Company information
-│   │   ├── services.md           # Service offerings
-│   │   ├── th/                   # Thai knowledge files
-│   │   │   ├── accounting-*.md
-│   │   │   ├── tax-*.md
-│   │   │   ├── company-*.md
-│   │   │   ├── work-permit-*.md
-│   │   │   └── ...
-│   │   └── en/                   # English knowledge files
-│   │       └── ...
-│   ├── page.tsx                   # Main SSR page
-│   └── layout.tsx
-├── scripts/
-│   ├── import-knowledge.js        # Script to import knowledge chunks from CSV
-│   └── import-services.js         # Script to import services from CSV
-└── README.md
+```bash
+docker compose build --no-cache
+docker compose up -d --force-recreate
 ```
 
-## How It Works
+### 5) Start / Stop services
 
-1. **Knowledge Loading**: The API route (`app/api/chat/route.ts`) recursively loads all Markdown files from the `app/knowledge/` directory
-2. **Context Management**: Knowledge is trimmed to fit within the context window (2048 tokens) while preserving complete sections
-3. **Prompt Engineering**: A strict system prompt instructs Mistral to only answer from the provided knowledge base
-4. **Response Generation**: Mistral generates responses based on the loaded knowledge
+```bash
+docker compose up -d
+docker compose down
+```
 
-## Configuration
+### 6) Health checks after start
 
-### Ollama Settings
+```bash
+curl -sS http://localhost:8001/health
+curl -sS http://localhost:8001/ready
+curl -sS -H "Authorization: Bearer sk-litellm-master" http://localhost:4000/v1/models
+curl -sS http://192.168.250.9:1234/v1/models
+```
 
-The system uses the following Ollama configuration:
-- **Model**: `mistral`
-- **Endpoint**: `http://localhost:11434/api/generate`
-- **Context Window**: 2048 tokens
-- **Temperature**: 0.2 (for more deterministic responses)
-- **Streaming**: Disabled
+### 7) Quick chat test
 
-### Knowledge Base
+```bash
+curl -sS -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"ตอบสั้นๆ ว่าระบบพร้อมแล้ว","model":"qwen3","temperature":0.2,"maxTokens":16384}'
+```
 
-- Knowledge files are stored as Markdown (`.md`) files
-- Files are organized by language (`th/`, `en/`) and topic
-- The system automatically loads all Markdown files recursively
-- Knowledge is limited to ~1600 characters to fit within the context window
+Default chat `maxTokens` is now `16384` (16k). You can still override per request.
 
-## Knowledge Base Topics
+### 7.1) ThaiLLM models (direct provider)
 
-### Thai (th/)
-- **Accounting**: audit, monthly-bookkeeping, year-end-closing, accounting-compliance
-- **Tax**: vat, withholding-tax, corporate-income-tax, personal-tax-owner, tax-basic
-- **Company Registration**: company-borjor, partnership-horjor, sole-proprietor, comparison
-- **Work Permit**: overview, requirements, restrictions, work-permit-visa
-- **Other**: boi, business-license, glossary, packages-and-pricing
+Set these env vars in `.env`:
 
-### English (en/)
-- Company registration, VAT, Work permit overview
+```bash
+THAILLM_URL=http://thaillm.or.th/api/v1
+THAILLM_API_KEY=your-key
+THAILLM_CONSUMER_ID=484ef436-d51f-453b-ab76-a9c22f6a4788
+```
 
-## API Endpoint
+Then call `/api/chat` with one of these model ids:
 
-### POST /api/chat
+- `openthaigpt-thaillm-8b-instruct-v7.2`
+- `pathumma-thaillm-qwen3-8b-think-3.0.0`
+- `typhoon-s-thaillm-8b-instruct`
+- `thalle-0.2-thaillm-8b-fa`
 
-Sends a message to the chat API and receives a response from Mistral.
+Example:
 
-**Request Body:**
+```bash
+curl -sS -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"สวัสดี","model":"openthaigpt-thaillm-8b-instruct-v7.2","temperature":0.3,"maxTokens":16384}'
+```
+
+### 8) If build fails with lockfile mismatch
+
+```bash
+pnpm install
+docker compose build frontend
+docker compose up -d frontend
+```
+
+### 9) Verify core phases locally (chat contract + RLS)
+
+```bash
+# 1) Ensure PostgreSQL is running
+docker compose up -d postgres
+
+# 2) Apply DB schema for RBAC/RLS tests
+bash scripts/ci-db-setup.sh
+
+# 3) Run phase-gate verification
+pnpm run verify:core
+# or
+make verify-core
+```
+
+---
+
+## CI
+
+GitHub Actions workflow: `.github/workflows/core-ci.yml`
+
+What it does on push/PR:
+
+1. Starts PostgreSQL service
+2. Applies `init.sql`, `rbac.sql`, `rls.sql`
+3. Runs `pnpm run verify:core`
+4. Runs `pnpm run build`
+
+---
+
+## Service URLs
+
+### User-Facing
+
+| Service | URL | Notes |
+|---|---|---|
+| **Frontend** | http://localhost:3000 | Next.js chat UI |
+| **Langfuse** | http://localhost:3001 | LLM observability & tracing |
+| **Grafana** | http://localhost:3002 | Metrics dashboards — `admin / admin` |
+| **Authentik** | http://localhost:9000 | SSO / identity provider |
+| **LM Studio** | http://localhost:1234 | Host only — not in Docker |
+
+### Backend API
+
+| URL | Notes |
+|---|---|
+| http://localhost:8001/docs | Swagger UI (interactive) |
+| http://localhost:8001/redoc | ReDoc API reference |
+
+### Infrastructure
+
+| Service | URL | Notes |
+|---|---|---|
+| **LiteLLM Gateway** | http://localhost:4000 | OpenAI-compatible LLM proxy |
+| **Qdrant** | http://localhost:6333 | Vector DB — REST API |
+| **Qdrant Dashboard** | http://localhost:6333/dashboard | Web UI |
+| **OpenSearch** | http://localhost:9200 | Lexical / hybrid search |
+| **HugeGraph** | http://localhost:8080 | Graph DB — REST API |
+| **HugeGraph UI** | http://localhost:8080/apis | API explorer |
+| **SeaweedFS Master** | http://localhost:9333 | Object storage master |
+| **SeaweedFS Volume** | http://localhost:8888 | Object storage volume |
+| **SeaweedFS Filer** | http://localhost:8889 | Object storage filer |
+| **NATS** | nats://localhost:4222 | Message bus |
+| **NATS Monitoring** | http://localhost:8222 | JetStream stats |
+| **Prometheus** | http://localhost:9090 | Metrics scraper |
+| **PostgreSQL** | localhost:5432 | `rag / ragpassword / ragdb` |
+
+---
+
+## Backend API Endpoints
+
+Base URL: `http://localhost:8001`
+
+### Health
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/health` | Liveness check — returns `{"status":"ok"}` |
+| `GET` | `/ready` | Readiness check — pings Qdrant, OpenSearch, LiteLLM, HugeGraph |
+| `GET` | `/metrics` | Prometheus metrics scrape endpoint |
+
+### Chat (RAG)
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/chat` | Send a message, get a RAG-grounded reply with citations |
+
+**Request body:**
 ```json
 {
-  "message": "VAT คืออะไร?"
+  "message": "What are the requirements for company registration in Thailand?",
+  "session_id": "optional-session-id",
+  "use_graph": true,
+  "top_k": 5
 }
 ```
 
 **Response:**
 ```json
 {
-  "reply": "ภาษีมูลค่าเพิ่ม (VAT) คือภาษีที่เก็บจากมูลค่าที่เพิ่มขึ้น..."
+  "reply": "...",
+  "citations": [{"id": "...", "content": "...", "score": 0.92}],
+  "retrieval_meta": {"vector_hits": 5, "graph_hits": 2},
+  "latency_ms": 1240,
+  "session_id": "session-abc123"
 }
 ```
 
-## Development
+### Documents
 
-### Adding New Knowledge
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/documents` | Upload a document (PDF, DOCX, MD) — triggers async parse → embed → entity pipeline |
+| `GET` | `/documents` | List all documents (latest 100) |
+| `PATCH` | `/documents/{doc_id}/publish` | Publish a document (makes it queryable) |
+| `DELETE` | `/documents/{doc_id}` | Delete a document |
 
-1. Create a new Markdown file in `app/knowledge/th/` or `app/knowledge/en/`
-2. The file will be automatically loaded on the next API request
-3. Ensure content is clear and well-structured for best results
+**Upload example:**
+```bash
+curl -X POST http://localhost:8001/documents \
+  -F "file=@my-doc.pdf" \
+  -F "language=th"
+```
 
-### Modifying the Prompt
+---
 
-Edit the `systemPrompt` in `app/api/chat/route.ts` to adjust how Mistral responds.
+## LiteLLM Gateway
 
-### Adjusting Context Window
+Base URL: `http://localhost:4000`  
+API Key: `sk-litellm-master`
 
-Modify `maxKnowledgeLength` in `app/api/chat/route.ts` to adjust how much knowledge is loaded (default: 1600 characters).
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/` | UI / status page |
+| `POST` | `/v1/chat/completions` | OpenAI-compatible chat — model: `qwen3` |
+| `POST` | `/v1/embeddings` | OpenAI-compatible embeddings — model: `text-embedding-3-small` |
+| `GET` | `/v1/models` | List available models |
+| `GET` | `/health` | Health check (requires API key) |
 
-## Limitations
+**Chat example:**
+```bash
+curl http://localhost:4000/v1/chat/completions \
+  -H "Authorization: Bearer sk-litellm-master" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"qwen3","messages":[{"role":"user","content":"Hello"}]}'
+```
 
-- Knowledge is limited by the context window size (2048 tokens)
-- Large knowledge bases may be truncated
-- No vector database or semantic search (phase 1)
-- All knowledge is loaded on each request (not optimized for large knowledge bases)
+---
 
-## Troubleshooting
+## Document Processing Pipeline
 
-### Ollama Connection Error
-- Ensure Ollama is running: `ollama serve`
-- Check that Mistral model is installed: `ollama list`
-- Verify the endpoint: `curl http://localhost:11434/api/generate`
+```
+Upload (POST /documents)
+  → SeaweedFS (file storage)
+  → NATS: doc.parse
+    → worker-parser (PDF/DOCX/MD → chunks → PostgreSQL)
+    → NATS: doc.embed
+      → worker-embedder (LiteLLM embeddings → Qdrant + OpenSearch)
+      → NATS: doc.entity
+        → worker-entity (LLM entity extraction → HugeGraph)
+```
 
-### Knowledge Not Loading
-- Check file permissions in `app/knowledge/`
-- Verify Markdown files have `.md` extension
-- Check server logs for file reading errors
+---
 
-## License
+## Default Credentials
 
-MIT
+| Service | Username | Password |
+|---|---|---|
+| Grafana | `admin` | `admin` |
+| PostgreSQL (main) | `rag` | `ragpassword` |
+| PostgreSQL (app role, RLS) | `rag_app` | `ragapppassword` |
+| PostgreSQL (langfuse) | `langfuse` | `langfusepassword` |
+| PostgreSQL (authentik) | `authentik` | `authentikpassword` |
+| LiteLLM | — | `sk-litellm-master` |

@@ -1,0 +1,68 @@
+name: Core CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  verify-core:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: rag
+          POSTGRES_PASSWORD: ragpassword
+          POSTGRES_DB: ragdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U rag -d ragdb"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      DATABASE_URL: postgresql://rag_app:ragapppassword@localhost:5432/ragdb
+      JWT_SECRET: test-jwt-secret
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h localhost -p 5432 -U rag -d ragdb; then
+              echo "PostgreSQL ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "PostgreSQL did not become ready in time"
+          exit 1
+
+      - name: Apply DB schema (init + RBAC + RLS)
+        run: bash scripts/ci-db-setup.sh
+
+      - name: Verify core tests
+        run: pnpm run verify:core
+
+      - name: Build frontend
+        run: pnpm run build

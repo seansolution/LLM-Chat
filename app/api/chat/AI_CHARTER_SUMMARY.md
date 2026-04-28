@@ -6,7 +6,7 @@
 
 ## Overview
 
-The AI Charter is the highest governing document for all AI systems operated by บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่). It establishes foundational principles, governance structure, and ethical framework for AI operations.
+The AI Charter is the highest governing document for all AI systems operated by บริษัท ABC จำกัด (สำนักงานใหญ่). It establishes foundational principles, governance structure, and ethical framework for AI operations.
 
 **Status:** Active  
 **Authority:** Board of Directors and Executive Team  

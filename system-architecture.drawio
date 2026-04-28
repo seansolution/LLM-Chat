@@ -1,0 +1,303 @@
+<mxfile host="app.diagrams.net" modified="2026-04-28T08:30:00.000Z" agent="Kiro" version="24.0.0" type="device">
+  <diagram id="system-architecture" name="Enterprise RAG Platform Architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="Enterprise RAG Platform — System Architecture" style="text;html=1;fontSize=24;fontStyle=1;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="50" y="10" width="1300" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LAYER 1: CLIENT LAYER ============ -->
+        <mxCell id="layer1-label" value="CLIENT LAYER" style="text;html=1;fontSize=12;fontStyle=1;align=left;verticalAlign=top;fillColor=#E8F4F8;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="70" width="1300" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend -->
+        <mxCell id="frontend" value="Next.js Frontend&#10;(Port 3000)&#10;&#10;• Chat UI&#10;• Model Selector&#10;• Conversation History&#10;• Share/Collaboration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;fontColor=white;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="110" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LAYER 2: API GATEWAY ============ -->
+        <mxCell id="layer2-label" value="API GATEWAY LAYER" style="text;html=1;fontSize=12;fontStyle=1;align=left;verticalAlign=top;fillColor=#E8F4F8;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="250" width="1300" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Next.js API Routes -->
+        <mxCell id="nextjs-api" value="Next.js API Routes&#10;/api/chat&#10;/api/documents&#10;/api/auth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7B68EE;fontColor=white;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="290" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI Backend -->
+        <mxCell id="fastapi" value="FastAPI Backend&#10;(Port 8001)&#10;&#10;• Chat Router&#10;• Documents Router&#10;• Health Router&#10;• Prometheus Metrics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7B68EE;fontColor=white;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="350" y="290" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Authentik -->
+        <mxCell id="authentik" value="Authentik&#10;(Port 9000)&#10;&#10;SSO/Auth&#10;OAuth2/OIDC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF6B6B;fontColor=white;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="620" y="290" width="150" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- LiteLLM Gateway -->
+        <mxCell id="litellm" value="LiteLLM Gateway&#10;(Port 4000)&#10;&#10;OpenAI-compatible&#10;LLM Proxy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF6B6B;fontColor=white;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="850" y="290" width="150" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- LM Studio -->
+        <mxCell id="lmstudio" value="LM Studio&#10;(Host Port 1234)&#10;&#10;Qwen3.5-9B&#10;nomic-embed-text" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF6B6B;fontColor=white;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="290" width="150" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LAYER 3: CORE SERVICES ============ -->
+        <mxCell id="layer3-label" value="CORE SERVICES LAYER" style="text;html=1;fontSize=12;fontStyle=1;align=left;verticalAlign=top;fillColor=#E8F4F8;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="420" width="1300" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- RAG Orchestrator -->
+        <mxCell id="rag-orchestrator" value="RAG Orchestrator&#10;&#10;1. Embed Query&#10;2. Parallel Retrieval&#10;3. Merge &amp; Dedupe&#10;4. Rerank (BGM)&#10;5. Build Prompt&#10;6. LLM Call" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50C878;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="460" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Vector Store Service -->
+        <mxCell id="vector-service" value="Vector Store&#10;Service&#10;&#10;• Qdrant Client&#10;• Semantic Search&#10;• Embeddings Upsert" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50C878;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="460" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Lexical Store Service -->
+        <mxCell id="lexical-service" value="Lexical Store&#10;Service&#10;&#10;• OpenSearch Client&#10;• Full-text Search&#10;• Fuzzy Matching" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50C878;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="520" y="460" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Graph Store Service -->
+        <mxCell id="graph-service" value="Graph Store&#10;Service&#10;&#10;• HugeGraph Client&#10;• Entity Relations&#10;• Graph Traversal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50C878;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="720" y="460" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Storage Service -->
+        <mxCell id="storage-service" value="Storage Service&#10;&#10;• SeaweedFS Client&#10;• File Upload/Download&#10;• Deduplication" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50C878;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="920" y="460" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Reranker Service -->
+        <mxCell id="reranker-service" value="Reranker Service&#10;&#10;• BGM Cross-encoder&#10;• LLM Scoring&#10;• Relevance Ranking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50C878;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="460" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LAYER 4: DATA LAYER ============ -->
+        <mxCell id="layer4-label" value="DATA LAYER" style="text;html=1;fontSize=12;fontStyle=1;align=left;verticalAlign=top;fillColor=#E8F4F8;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="610" width="1300" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- PostgreSQL -->
+        <mxCell id="postgres" value="PostgreSQL&#10;(Port 5432)&#10;&#10;• Documents&#10;• Chunks&#10;• QueryLog&#10;• Users/Roles&#10;• Conversations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9F43;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="650" width="150" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Qdrant -->
+        <mxCell id="qdrant" value="Qdrant&#10;(Port 6333)&#10;&#10;Vector DB&#10;768-dim&#10;Cosine Similarity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9F43;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="650" width="140" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- OpenSearch -->
+        <mxCell id="opensearch" value="OpenSearch&#10;(Port 9200)&#10;&#10;Lexical/Hybrid&#10;Full-text Index" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9F43;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="490" y="650" width="140" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- HugeGraph -->
+        <mxCell id="hugegraph" value="HugeGraph&#10;(Port 8080)&#10;&#10;Graph DB&#10;Entity Relations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9F43;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="680" y="650" width="140" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- SeaweedFS -->
+        <mxCell id="seaweedfs" value="SeaweedFS&#10;(Ports 9333/8888)&#10;&#10;Object Storage&#10;Documents Bucket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9F43;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="870" y="650" width="140" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LAYER 5: MESSAGE QUEUE & WORKERS ============ -->
+        <mxCell id="layer5-label" value="MESSAGE QUEUE &amp; WORKERS LAYER" style="text;html=1;fontSize=12;fontStyle=1;align=left;verticalAlign=top;fillColor=#E8F4F8;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="800" width="1300" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- NATS JetStream -->
+        <mxCell id="nats" value="NATS JetStream&#10;(Port 4222)&#10;&#10;doc.parse&#10;doc.embed&#10;doc.entity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B59B6;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="840" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Parser Worker -->
+        <mxCell id="parser-worker" value="Parser Worker&#10;&#10;• Download from SeaweedFS&#10;• Parse PDF/DOCX/MD&#10;• Chunk Text (512w)&#10;• Store in PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E74C3C;fontColor=white;fontSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="840" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Embedder Worker -->
+        <mxCell id="embedder-worker" value="Embedder Worker&#10;&#10;• Batch Embed (32)&#10;• Upsert to Qdrant&#10;• Index to OpenSearch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E74C3C;fontColor=white;fontSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="500" y="840" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Entity Extractor Worker -->
+        <mxCell id="entity-worker" value="Entity Extractor&#10;Worker&#10;&#10;• LLM NER&#10;• Extract Entities&#10;• Upsert to HugeGraph" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E74C3C;fontColor=white;fontSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="700" y="840" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LAYER 6: OBSERVABILITY ============ -->
+        <mxCell id="layer6-label" value="OBSERVABILITY LAYER" style="text;html=1;fontSize=12;fontStyle=1;align=left;verticalAlign=top;fillColor=#E8F4F8;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="970" width="1300" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Prometheus -->
+        <mxCell id="prometheus" value="Prometheus&#10;(Port 9090)&#10;&#10;Metrics Scraper" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16A085;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1010" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Grafana -->
+        <mxCell id="grafana" value="Grafana&#10;(Port 3002)&#10;&#10;Dashboards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16A085;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1010" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Langfuse -->
+        <mxCell id="langfuse" value="Langfuse&#10;(Port 3001)&#10;&#10;LLM Tracing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16A085;fontColor=white;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1010" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ============ CONNECTIONS ============ -->
+
+        <!-- Frontend to API -->
+        <mxCell id="conn1" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;" edge="1" parent="1" source="frontend" target="nextjs-api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Next.js API to FastAPI -->
+        <mxCell id="conn2" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;" edge="1" parent="1" source="nextjs-api" target="fastapi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to Authentik -->
+        <mxCell id="conn3" value="Auth" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="fastapi" target="authentik">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to LiteLLM -->
+        <mxCell id="conn4" value="LLM Calls" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="fastapi" target="litellm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LiteLLM to LM Studio -->
+        <mxCell id="conn5" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;" edge="1" parent="1" source="litellm" target="lmstudio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to RAG Orchestrator -->
+        <mxCell id="conn6" value="Query" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="fastapi" target="rag-orchestrator">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- RAG to Vector Service -->
+        <mxCell id="conn7" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="rag-orchestrator" target="vector-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- RAG to Lexical Service -->
+        <mxCell id="conn8" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="rag-orchestrator" target="lexical-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- RAG to Graph Service -->
+        <mxCell id="conn9" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="rag-orchestrator" target="graph-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- RAG to Reranker -->
+        <mxCell id="conn10" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="rag-orchestrator" target="reranker-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Vector Service to Qdrant -->
+        <mxCell id="conn11" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="vector-service" target="qdrant">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Lexical Service to OpenSearch -->
+        <mxCell id="conn12" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="lexical-service" target="opensearch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Graph Service to HugeGraph -->
+        <mxCell id="conn13" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="graph-service" target="hugegraph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Storage Service to SeaweedFS -->
+        <mxCell id="conn14" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="storage-service" target="seaweedfs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to PostgreSQL -->
+        <mxCell id="conn15" value="Metadata" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="fastapi" target="postgres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to NATS -->
+        <mxCell id="conn16" value="Publish Events" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="fastapi" target="nats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NATS to Parser Worker -->
+        <mxCell id="conn17" value="doc.parse" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;fontSize=8;" edge="1" parent="1" source="nats" target="parser-worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NATS to Embedder Worker -->
+        <mxCell id="conn18" value="doc.embed" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;fontSize=8;" edge="1" parent="1" source="nats" target="embedder-worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NATS to Entity Worker -->
+        <mxCell id="conn19" value="doc.entity" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;fontSize=8;" edge="1" parent="1" source="nats" target="entity-worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Parser Worker to PostgreSQL -->
+        <mxCell id="conn20" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="parser-worker" target="postgres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Embedder Worker to Qdrant -->
+        <mxCell id="conn21" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="embedder-worker" target="qdrant">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Embedder Worker to OpenSearch -->
+        <mxCell id="conn22" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="embedder-worker" target="opensearch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Entity Worker to HugeGraph -->
+        <mxCell id="conn23" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="entity-worker" target="hugegraph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to Prometheus -->
+        <mxCell id="conn24" value="Metrics" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;fontSize=8;" edge="1" parent="1" source="fastapi" target="prometheus">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Prometheus to Grafana -->
+        <mxCell id="conn25" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;" edge="1" parent="1" source="prometheus" target="grafana">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FastAPI to Langfuse -->
+        <mxCell id="conn26" value="LLM Traces" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;strokeColor=#666;fontSize=8;" edge="1" parent="1" source="fastapi" target="langfuse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend: Blue=Frontend | Purple=API | Red=Auth/LLM | Green=Services | Orange=Data | Purple=Queue | Red=Workers | Teal=Observability" style="text;html=1;fontSize=9;align=left;verticalAlign=top;fillColor=#F0F0F0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1120" width="1300" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

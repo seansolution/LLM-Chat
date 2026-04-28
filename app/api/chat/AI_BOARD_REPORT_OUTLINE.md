@@ -26,7 +26,7 @@
 ### Slide 1: Title Slide
 
 **Title:** AI Performance & Governance Report  
-**Subtitle:** Q[Quarter] [Year] | บริษัท แสน โซลูชั่น จำกัด
+**Subtitle:** Q[Quarter] [Year] | บริษัท ABC จำกัด
 
 **Content:**
 - Report period

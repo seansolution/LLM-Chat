@@ -8,13 +8,13 @@
 
 **Expected Response Behavior:**
 - Friendly greeting in Thai
-- Introduces as staff of Sean Solution
+- Introduces as staff of SEAN
 - Invites questions about services
 - Includes contact info
 
 **Golden Response:**
 ```
-สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด 
+สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด 
 มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ
 สนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ
 ```
@@ -153,7 +153,7 @@
 
 **Golden Response:**
 ```
-บริษัท แสน โซลูชั่น จำกัด อยู่ที่
+บริษัท ABC จำกัด อยู่ที่
 92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540
 
 ติดต่อได้ที่:

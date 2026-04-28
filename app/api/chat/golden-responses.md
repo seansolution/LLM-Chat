@@ -21,14 +21,14 @@
 
 **Golden Response:**
 ```
-สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)
+สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด (สำนักงานใหญ่)
 มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ
 สนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ
 ```
 
 **Must-Have Rules:**
 - ✅ Friendly greeting in Thai
-- ✅ Introduces as AI Sales Admin of Sean Solution
+- ✅ Introduces as AI Sales Admin of SEAN
 - ✅ Mentions services (HR, Accounting, Registration)
 - ✅ Includes contact information (phone + email)
 - ✅ Soft CTA inviting contact
@@ -255,14 +255,14 @@
 
 **Golden Response:**
 ```
-สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)
+สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด (สำนักงานใหญ่)
 มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ
 หากต้องการความช่วยเหลือเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ
 ```
 
 **Must-Have Rules:**
 - ✅ Friendly greeting in Thai
-- ✅ Introduces as AI Support Agent of Sean Solution
+- ✅ Introduces as AI Support Agent of SEAN
 - ✅ Mentions services briefly
 - ✅ Includes contact information
 - ✅ Patient, clear tone
@@ -325,7 +325,7 @@
 
 **Golden Response:**
 ```
-บริษัท แสน โซลูชั่น จำกัด อยู่ที่
+บริษัท ABC จำกัด อยู่ที่
 92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540
 
 ติดต่อได้ที่:

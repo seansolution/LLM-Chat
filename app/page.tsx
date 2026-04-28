@@ -1,33 +1,74 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import ClientChat from './components/ClientChat'
+import ThemeToggle from './components/ThemeToggle'
 
 export default function Page() {
-  const [isDark, setIsDark] = React.useState(true)
-  const [mounted, setMounted] = React.useState(false)
+  const router = useRouter()
+  const [checking, setChecking] = useState(true)
+  const [authed, setAuthed] = useState(false)
 
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(data => {
+        if (data.user) {
+          setAuthed(true)
+        } else {
+          router.replace('/login')
+        }
+      })
+      .catch(() => router.replace('/login'))
+      .finally(() => setChecking(false))
+  }, [router])
+
+  if (checking) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-slate-500 text-sm">Loading…</div>
+      </div>
+    )
+  }
+
+  if (!authed) return null
 
   return (
-    <div className={`h-screen flex flex-col bg-slate-900 transition-opacity duration-250 ${mounted ? 'opacity-100' : 'opacity-0'} overflow-hidden`}>
-      <nav className="flex-shrink-0 border-b border-slate-800 px-6 py-3 flex justify-between items-center bg-slate-900">
-        <div className="text-sm font-medium text-slate-100 tracking-tight">
-          SEAN SOLUTION
+    <div className="h-screen flex flex-col bg-slate-900 overflow-hidden">
+      <nav className="flex-shrink-0 border-b border-slate-800 px-5 py-3 flex items-center justify-between bg-slate-950">
+        <div className="flex items-center gap-2">
+          <span className="text-slate-100 font-semibold text-sm tracking-tight">Multi-Model Chat</span>
+          <span className="text-[10px] text-slate-600 bg-slate-800 px-1.5 py-0.5 rounded font-mono">
+            LiteLLM · 20+ models
+          </span>
         </div>
-        <button
-          onClick={() => setIsDark(!isDark)}
-          className="px-3 py-1.5 text-xs text-slate-400 hover:text-slate-100 transition-colors"
-        >
-          {isDark ? 'Light' : 'Dark'}
-        </button>
+        <div className="flex items-center gap-3">
+          <ThemeToggle variant="icon" />
+          <a
+            href="/admin/users"
+            className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+          >
+            Admin
+          </a>
+          <a
+            href="/change-password"
+            className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+          >
+            Change password
+          </a>
+          <button
+            onClick={async () => {
+              await fetch('/api/auth/logout', { method: 'POST' })
+              router.replace('/login')
+            }}
+            className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+          >
+            Sign out
+          </button>
+        </div>
       </nav>
-
-      <main className="flex-1 flex flex-col min-h-0 overflow-hidden max-w-4xl w-full mx-auto px-4 sm:px-6 py-6">
-        <div className="flex-1 flex flex-col min-h-0">
-          <ClientChat isDark={isDark} />
-        </div>
+      <main className="flex-1 min-h-0 overflow-hidden">
+        <ClientChat />
       </main>
     </div>
   )

@@ -405,6 +405,7 @@ export function createChatLogEntry(params: {
   handoffStatus: HandoffStatus
   handoffReason: HandoffReason
   abVariant: ABTestVariant
+  abRole: 'SALES' | 'SUPPORT' | 'OPS' | 'none'
   abResponseType: 'pricing' | 'overview' | 'none'
   contactMethod: ContactMethod
   messageCount: number
@@ -453,6 +454,7 @@ export function createChatLogEntry(params: {
     
     abTesting: {
       variant: params.abVariant,
+      role: params.abRole,
       responseType: params.abResponseType,
     },
     

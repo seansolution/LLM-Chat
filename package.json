@@ -7,22 +7,29 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
+    "verify:core": "jest app/api/chat/route.contract.test.ts app/lib/rls.test.ts",
     "test:watch": "jest --watch",
     "test:regression:generate": "ts-node scripts/generate-regression-tests.ts",
     "test:safety-gates": "jest app/api/chat/safety-gates.test.ts --testNamePattern=\"Safety Gates Runner\"",
-    "test:ci": "jest && pnpm run test:safety-gates"
+    "test:ci": "jest && pnpm run test:safety-gates",
+    "seed:admin": "ts-node scripts/seed-admin.ts",
+    "db:migrate:rbac": "psql $DATABASE_URL -f infra/postgres/rbac.sql",
+    "db:migrate:rls": "psql $DATABASE_URL -f infra/postgres/rls.sql",
+    "db:migrate:knowledge": "psql $DATABASE_URL -f infra/postgres/knowledge.sql"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
     "next": "^14.0.0",
+    "pg": "^8.20.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "25.0.6",
+    "@types/pg": "^8.20.0",
     "@types/react": "19.2.8",
     "autoprefixer": "^10.4.16",
     "jest": "^29.5.0",

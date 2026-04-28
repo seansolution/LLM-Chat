@@ -15,10 +15,10 @@ export const exampleChatLogs: ChatLogEntry[] = [
     detectedIntent: detectIntent('สวัสดี'),
     expectedIntent: 'unknown', // Greeting maps to unknown in current system
     expectedPersona: 'REGISTRATION',
-    aiResponse: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด มีอะไรให้ช่วยไหมคะ?',
+    aiResponse: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด มีอะไรให้ช่วยไหมคะ?',
     isPricingQuestion: false,
-    containsPrice: containsPrice('สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด มีอะไรให้ช่วยไหมคะ?'),
-    goldenResponse: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด\nมีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ\nสนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ',
+    containsPrice: containsPrice('สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด มีอะไรให้ช่วยไหมคะ?'),
+    goldenResponse: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด\nมีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ\nสนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ',
   },
 
   // Test Case 2: Company Registration Pricing
@@ -85,10 +85,10 @@ export const exampleChatLogs: ChatLogEntry[] = [
     detectedIntent: detectIntent('บริษัทอยู่ที่ไหน'),
     expectedIntent: 'unknown', // Should be company_overview
     expectedPersona: 'REGISTRATION',
-    aiResponse: 'บริษัท แสน โซลูชั่น จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com',
+    aiResponse: 'บริษัท ABC จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com',
     isPricingQuestion: false,
-    containsPrice: containsPrice('บริษัท แสน โซลูชั่น จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com'),
-    goldenResponse: 'บริษัท แสน โซลูชั่น จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com\n- เว็บไซต์: https://www.seansolution.co.th\n\nมีอะไรให้ช่วยเพิ่มเติมไหมคะ? 😊',
+    containsPrice: containsPrice('บริษัท ABC จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com'),
+    goldenResponse: 'บริษัท ABC จำกัด อยู่ที่\n92/474 หมู่ที่ 8 ตำบลราชาเทวะ อำเภอบางพลี จังหวัดสมุทรปราการ 10540\n\nติดต่อได้ที่:\n- โทร: 086-398-6889\n- อีเมล: zanhcpe@gmail.com\n- เว็บไซต์: https://www.seansolution.co.th\n\nมีอะไรให้ช่วยเพิ่มเติมไหมคะ? 😊',
   },
 
   // Test Case 7: Generic Pricing

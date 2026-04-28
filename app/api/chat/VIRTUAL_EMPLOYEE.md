@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the AI chat system as a virtual employee of บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่), with clear job responsibilities, KPIs, performance review framework, and continuous improvement processes.
+This document defines the AI chat system as a virtual employee of บริษัท ABC จำกัด (สำนักงานใหญ่), with clear job responsibilities, KPIs, performance review framework, and continuous improvement processes.
 
 ---
 

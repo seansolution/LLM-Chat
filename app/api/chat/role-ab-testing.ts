@@ -44,7 +44,7 @@ export const SALES_VARIANT_A = {
     approach: 'informative'
   },
   greeting: {
-    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)',
+    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด (สำนักงานใหญ่)',
     invitation: 'มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ',
     cta: 'สนใจสอบถามเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ',
     tone: 'polite'
@@ -69,7 +69,7 @@ export const SALES_VARIANT_B = {
     approach: 'action-oriented'
   },
   greeting: {
-    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)',
+    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด (สำนักงานใหญ่)',
     invitation: 'มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ',
     cta: 'พร้อมเริ่มต้นได้เลยค่ะ! 📞 โทร 086-398-6889 หรือส่งอีเมล zanhcpe@gmail.com',
     tone: 'sales-oriented'
@@ -94,7 +94,7 @@ export const SUPPORT_VARIANT_A = {
     approach: 'helpful'
   },
   greeting: {
-    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)',
+    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด (สำนักงานใหญ่)',
     invitation: 'มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ',
     cta: 'หากต้องการความช่วยเหลือเพิ่มเติม ติดต่อ 086-398-6889 หรือ zanhcpe@gmail.com นะคะ',
     tone: 'patient'
@@ -119,7 +119,7 @@ export const SUPPORT_VARIANT_B = {
     approach: 'helpful'
   },
   greeting: {
-    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท แสน โซลูชั่น จำกัด (สำนักงานใหญ่)',
+    introduction: 'สวัสดีค่ะ 😊 ยินดีต้อนรับสู่บริษัท ABC จำกัด (สำนักงานใหญ่)',
     invitation: 'มีอะไรให้ช่วยไหมคะ? เรามีบริการด้าน HR บัญชี และจดทะเบียนบริษัทค่ะ',
     cta: 'ต้องการความช่วยเหลือเพิ่มเติมไหมคะ? 📞 โทร 086-398-6889 หรืออีเมล zanhcpe@gmail.com',
     tone: 'proactive'
@@ -242,20 +242,22 @@ export function applyRoleVariantToResponse(
   let variantCTA = ''
   
   if (role === 'SALES') {
+    const salesVariant = roleVariants as typeof SALES_VARIANT_A
     if (responseType === 'pricing') {
-      variantCTA = roleVariants.pricing.cta
+      variantCTA = salesVariant.pricing.cta
     } else if (responseType === 'overview') {
-      variantCTA = roleVariants.overview.cta
+      variantCTA = salesVariant.overview.cta
     } else if (responseType === 'greeting') {
-      variantCTA = roleVariants.greeting.cta
+      variantCTA = salesVariant.greeting.cta
     }
   } else if (role === 'SUPPORT') {
+    const supportVariant = roleVariants as typeof SUPPORT_VARIANT_A
     if (responseType === 'pricing') {
-      variantCTA = roleVariants.pricing.cta
+      variantCTA = supportVariant.pricing.cta
     } else if (responseType === 'overview') {
-      variantCTA = roleVariants.overview.cta
+      variantCTA = supportVariant.overview.cta
     } else if (responseType === 'greeting') {
-      variantCTA = roleVariants.greeting.cta
+      variantCTA = supportVariant.greeting.cta
     }
   } else if (role === 'OPS') {
     // OPS always redirects - use redirect message
